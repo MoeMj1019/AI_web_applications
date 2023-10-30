@@ -1,10 +1,24 @@
+<!-- templates/result.html -->
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Result Page</title>
+    <title>Word Processing Result</title>
 </head>
 <body>
-    <h1>Result Page</h1>
-    <p>Processed Word: {{ processed_word }}</p>
+    <h1>Processing Result</h1>
+    
+    <p>Original Word: {{ processed_word }}</p>
+
+    <h2>Links and Information:</h2>
+    <ul>
+        {% for link_info in links_info %}
+            <li>Link: <a href="{{ link_info[0] }}">{{ link_info[0] }}</a></li>
+            <ul>
+                <li>Frequency: {{ link_info[1] }}</li>
+                <li>Searched Words: {{ link_info[2] }}</li>
+            </ul>
+        {% endfor %}
+    </ul>
 </body>
 </html>

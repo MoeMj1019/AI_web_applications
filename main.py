@@ -12,10 +12,10 @@ def process():
     parser = Query_Parser()
     if request.method == 'POST':
         word = request.form['word']
-        parser.simpleSearch(word)
-        # You can now process the entered 'word' variable here as needed
-        processed_word = word.upper()  # Example: Convert the word to uppercase
-        return render_template('result.html', processed_word=processed_word)
+        links_info = parser.simpleSearch(word)  # Use your parser to generate the links_info list
+
+        # Pass the data to the 'result.html' template
+        return render_template('result.html', processed_word=word, links_info=links_info)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -34,7 +34,6 @@ class Query_Parser:
             else:
                 continue
 
-            print(self.URLWordOccurent)
-
+        return self.URLWordOccurent
 
     

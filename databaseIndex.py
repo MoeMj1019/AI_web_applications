@@ -1,16 +1,27 @@
-import pandas as pd
+import json
+import os
 
 class databaseIndex:
     def __init__(self):
-        self.my_dict = {
-            "key1" : [{"URL" : "link.com", "freq": 0}, {"URL" : "link2.com", "freq": 20} ]
-        }
+        self.file_path = "safedIndexDataBase.json"
+        if os.path.exists(self.file_path):
+            self.my_dict = self.loadData()
+            print("calling the load function")
+        else:        
+            self.my_dict = dict()
+            print("NOT called the load function")
         print("OK")
 
     def add(self, key, URL, freq):
-        if key not in self.my_dict:
+        if key not in self.my_dict.keys():
             self.my_dict[key] = [{"URL" : URL, "freq": freq}]
         else:
+            if key in self.my_dict:
+                for URLDict in self.my_dict[key]:
+                    if URL == URLDict["URL"]:
+                        URLDict["freq"] = freq
+                        return
+                    
             self.my_dict[key].append({"URL" : URL, "freq": freq})
         #searching for the word in the dict
         #update if accuring
@@ -24,16 +35,21 @@ class databaseIndex:
         pass
 
     def safeData(self):
-        pass
+        with open(self.file_path, 'w') as json_file:
+            json.dump(self.my_dict, json_file)
+        print("Index DataBase was safed successfully :-)")    
 
     def loadData(self):
-        pass
+        with open(self.file_path, 'r') as json_file:
+            loaded_data = json.load(json_file)
+        print("Index DataBase was loaded successfully :-)")
+        return loaded_data
 
+#---Some testing code---
 dI = databaseIndex()
 dI.add("TEST", "test.com", 1)
-dI.add("WTF", "WTF.com", 100000)
+dI.add("WTF", "WTF.com", 200000)
 dI.add("TEST", "linkGehtKlar.com", 100)
-print(dI.getData()["TEST"][0])
-#dt = pd.DataFrame(dI.getData())
-#print(dt)
-
+print(dI.getData())
+dI.safeData()
+#-----------------------

@@ -1,3 +1,9 @@
+#OUR gitignores
+#json
+*.json
+#Test Directory
+/Test
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -119,8 +125,7 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
-#json
-*.json
+
 
 # Environments
 .env

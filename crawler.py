@@ -1,6 +1,8 @@
 from databaseIndex import DatabaseIndex
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
+from collections import Counter
 
 
 class Crawler:
@@ -12,13 +14,10 @@ class Crawler:
 
         self.useRawOutput = useRawOutput
 
+    # 
+    def start(self,*root_urls,search_method="bfs", max_iterations=1000, stay_in_domain=True):
 
-    def start(self,*root_urls,search_method="bfs", max_iterations=1000):
-
-        if len(root_urls) > 1:
-            urls_to_visit = [*root_urls]
-        else:
-            urls_to_visit = [root_urls]
+        urls_to_visit = list(root_urls)
         
         visited_urls = set()
 
@@ -30,39 +29,75 @@ class Crawler:
             print("URL: ", url)
             if url in visited_urls:
                 continue
-            visited_urls.add(url)
 
-            if not self.is_valid_url(url):
+            response = None
+            try:
+                response = requests.get(url,timeout=8)
+            except:
                 continue
 
-            # print("Processing: ", url)
-            # urls, info = self.process_url(url)
+            if self.is_valid_url(response) and not self.is_visited_recently(url): # TODO check for other statues as well ans sort them out
+                
+                print("Processing: ", url)
+                # print(response.headers)
+                # print("###################")
+                # print(response.text)
+                # print("###################")
+                urls, info = self.process_content(url,response.text)
 
-            # urls_to_visit.push(urls)
-            # self.add_to_index(url, info)
+                for item in urls:
+                    urls_to_visit.append(item)
 
-            self.index.add(f"key{iteration}", url,15) 
-            print("Done processing: ", url)
+                self.add_to_index(url, info)
 
-    def is_valid_url(self, url):
-        return True
+                # self.index.add(f"key{iteration}", url,15) 
+                print("Done processing: ", url)
+
+                visited_urls.add(url)
+
+
+    def is_valid_url(self, response):
+        
+        return response.status_code == 200 and "text/html" in response.headers["Content-Type"]
 
     def add_to_index(self, url, info):
-        pass
+        for word, count in info.items():
+            self.index.add(word, url, count)
 
-    def process_url(self, url):
-        urls = self.get_urls(url)
-        info = self.get_info(url)
+    def process_content(self, url ,raw_html_content):
+
+        soup = BeautifulSoup(raw_html_content, 'html.parser')
+
+        urls = self.get_urls(url, soup)
+        info = self.get_info(soup)
 
         return urls, info
 
-    def get_urls(self, url):
-        pass
+    def get_urls(self, url, html_content:BeautifulSoup):
+        new_urls = [a['href'] for a in html_content.find_all('a') if a.has_attr('href')]
 
-    def get_info(self, url):
-        pass       
+        for i in range(len(new_urls)):
+            if new_urls[i].startswith("/"):
+                new_urls[i] = url + new_urls[i]
+            elif not new_urls[i].startswith("http") or not new_urls[i].startswith("https"):
+                url = "/".join(url.split("/")[:-1])
+                new_urls[i] = url + "/" + new_urls[i]
+
+        return new_urls
+
+    def get_info(self, html_content:BeautifulSoup): # TODO more enformations
+        text = html_content.text
+        words = text.split()
+        words = [word.lower() for word in words]
+        words_counts = Counter(words)
+        return words_counts
+    
+    def is_visited_recently(self, url):
+        return False
+    
 
 if __name__ == "__main__":
     c = Crawler()
-    c.start("wwwsklufgldgflagjfajf.google.com/", "l.csjdkfgdfgksdgfaom", search_method="bfs", max_iterations=10)
+    c.start("https://vm009.rz.uos.de/crawl/index.html", search_method="bfs", max_iterations=1000)
+
     c.index.safeData()

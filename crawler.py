@@ -62,7 +62,7 @@ class Crawler:
     def get_info(self, url):
         pass       
 
-            
-c = Crawler()
-c.start("wwwsklufgldgflagjfajf.google.com/", "l.csjdkfgdfgksdgfaom", search_method="bfs", max_iterations=10)
-c.index.safeData()
+if __name__ == "__main__":
+    c = Crawler()
+    c.start("wwwsklufgldgflagjfajf.google.com/", "l.csjdkfgdfgksdgfaom", search_method="bfs", max_iterations=10)
+    c.index.safeData()

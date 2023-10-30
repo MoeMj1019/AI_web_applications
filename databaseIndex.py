@@ -1,7 +1,7 @@
 import json
 import os
 
-class databaseIndex:
+class DatabaseIndex:
     def __init__(self):
         self.file_path = "safedIndexDataBase.json"
         if os.path.exists(self.file_path):
@@ -46,10 +46,10 @@ class databaseIndex:
         return loaded_data
 
 #---Some testing code---
-dI = databaseIndex()
-dI.add("TEST", "test.com", 1)
-dI.add("WTF", "WTF.com", 200000)
-dI.add("TEST", "linkGehtKlar.com", 100)
-print(dI.getData())
-dI.safeData()
+#dI = DatabaseIndex()
+#dI.add("TEST", "test.com", 1)
+#dI.add("WTF", "WTF.com", 200000)
+#dI.add("TEST", "linkGehtKlar.com", 100)
+#print(dI.getData())
+#dI.safeData()
 #-----------------------

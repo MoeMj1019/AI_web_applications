@@ -7,8 +7,6 @@ data = {
     'City': ['New York', 'San Francisco', 'Los Angeles']
 }
 
-# Convert the dictionary to a DataFrame
-df = pd.DataFrame.from_dict(data)
+data = pd.DataFrame(data)
 
-# Print the DataFrame
-print(df)
+data.to_csv('data.csv', encoding='utf-8', index=False)

@@ -2,7 +2,6 @@ import json
 import os
 
 class DatabaseIndex:
-class DatabaseIndex:
     def __init__(self):
         self.file_path = "safedIndexDataBase.json"
         if os.path.exists(self.file_path):

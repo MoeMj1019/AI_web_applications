@@ -3,6 +3,7 @@
 *.json
 #Test Directory
 Test/
+myenv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

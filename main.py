@@ -12,7 +12,7 @@ def process():
     parser = Query_Parser()
     if request.method == 'POST':
         word = request.form['word']
-        parser.search(word)
+        parser.simpleSearch(word)
         # You can now process the entered 'word' variable here as needed
         processed_word = word.upper()  # Example: Convert the word to uppercase
         return render_template('result.html', processed_word=processed_word)

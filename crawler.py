@@ -1,5 +1,7 @@
 from databaseIndex import DatabaseIndex
-# import requests
+import requests
+from bs4 import BeautifulSoup
+
 
 class Crawler:
     def __init__(self, index:DatabaseIndex = None, useRawOutput=False) -> None:
@@ -11,14 +13,21 @@ class Crawler:
         self.useRawOutput = useRawOutput
 
 
-    def start(self,search_method="", max_iterations=1000, *root_urls):
-        urls_to_visit = Stack(*root_urls)
+    def start(self,*root_urls,search_method="bfs", max_iterations=1000):
+
+        if len(root_urls) > 1:
+            urls_to_visit = [*root_urls]
+        else:
+            urls_to_visit = [root_urls]
+        
         visited_urls = set()
 
-        iterations = 0 
-        while not urls_to_visit.isEmpty() and iterations < max_iterations:
-            url = urls_to_visit.pop()
+        iteration = 0 
+        while len(urls_to_visit) > 0 and iteration < max_iterations:
+            iteration += 1
 
+            url = urls_to_visit.pop()
+            print("URL: ", url)
             if url in visited_urls:
                 continue
             visited_urls.add(url)
@@ -26,70 +35,34 @@ class Crawler:
             if not self.is_valid_url(url):
                 continue
 
-            print("Processing: ", url)
-            urls, info = self.process_url(url)
+            # print("Processing: ", url)
+            # urls, info = self.process_url(url)
 
-            urls_to_visit.push(urls)
-            self.index.add(url, info)
+            # urls_to_visit.push(urls)
+            # self.add_to_index(url, info)
+
+            self.index.add(f"key{iteration}", url,15) 
             print("Done processing: ", url)
 
-            iterations += 1
-
     def is_valid_url(self, url):
+        return True
+
+    def add_to_index(self, url, info):
         pass
 
     def process_url(self, url):
-        pass
+        urls = self.get_urls(url)
+        info = self.get_info(url)
+
+        return urls, info
 
     def get_urls(self, url):
         pass
 
     def get_info(self, url):
-        pass
-    
-
-
-
-class Stack:
-    def __init__(self,  *items) -> None:
-        self.container = list(*items)
-
-
-    def push(self, *item) -> None:
-        self.container.append(*item)
-
-    def pop(self) -> object:
-        return self.container.pop()
-    
-    def isEmpty(self):
-        return len(self.container) == 0
-
-    def length(self):
-        return len(self.container)    
-    
-
-class queue:
-    def __init__(self,  *items) -> None:
-        self.container = list(*items)
-
-
-    def push(self, *item) -> None:
-        self.container.append(*item)
-
-    def pop(self) -> object:
-        return self.container.pop(0)
-    
-    def isEmpty(self):
-        return len(self.container) == 0
-
-    def length(self):
-        return len(self.container)  
+        pass       
 
             
-            
-
-            
-
-
-
-
+c = Crawler()
+c.start("wwwsklufgldgflagjfajf.google.com/", "l.csjdkfgdfgksdgfaom", search_method="bfs", max_iterations=10)
+c.index.safeData()

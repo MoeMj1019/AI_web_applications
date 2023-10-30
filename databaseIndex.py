@@ -13,6 +13,7 @@ class DatabaseIndex:
         print("OK")
 
     def add(self, key, URL, freq):
+        print("adding to the dict")
         if key not in self.my_dict.keys():
             self.my_dict[key] = [{"URL" : URL, "freq": freq}]
         else:

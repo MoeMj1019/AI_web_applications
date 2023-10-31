@@ -3,7 +3,9 @@
 *.json
 #Test Directory
 Test/
+test/
 myenv/
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

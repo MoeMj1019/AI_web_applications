@@ -1,13 +1,14 @@
 import json
 
 class Query_Parser:
-    def __init__(self) -> None:
+    def __init__(self, index_path="safedIndexDataBase.json") -> None:
+        self.index_path = index_path
         self.sentence = str
         self.words = list
         self.my_dict = dict()
         self.URLWordOccurent = list()
         #load the Index Data Base (Word->Links)
-        with open("safedIndexDataBase.json", 'r') as json_file:
+        with open(self.index_path, 'r') as json_file:
             self.my_dict = json.load(json_file)
 
 

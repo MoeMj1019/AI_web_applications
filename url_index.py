@@ -28,9 +28,9 @@ class Url_Index:
             json.dump(self.my_dict, json_file)
         print("Url_Index was saved successfully :-)")
 
-    def get(self, url, attribute="time_stamp"):
+    def get(self, url, attribute="time_stamp"): 
         try:
-            return self.my_dict[url][attribute]
+            return self.my_dict[url][attribute] # self.my_dict.get(url, {}).get(attribute, None)
         except KeyError:
             return None
 

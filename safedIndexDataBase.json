@@ -18,20 +18,6 @@
     { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 4 }
   ],
   "welcome": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
-  "to": [
-    { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }
-  ],
-  "the": [
-    { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 5 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 6 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 4 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 3 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
-  ],
   "platypus": [
     { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 2 },
     { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
@@ -44,24 +30,6 @@
   ],
   "anatinus": [
     { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }
-  ],
-  "is": [
-    { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 3 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 2 }
-  ],
-  "a": [
-    { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 7 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 3 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 5 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 3 }
   ],
   "semiaquatic": [
     { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }
@@ -97,36 +65,13 @@
   "representative": [
     { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }
   ],
-  "or": [
-    { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 2 }
-  ],
   "monotypic": [
     { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }
   ],
   "taxon": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
-  "of": [
-    { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 6 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 3 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 4 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 2 }
-  ],
-  "its": [
-    { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
-  ],
   "family": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
   "ornithorhynchidae": [
     { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }
-  ],
-  "and": [
-    { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 3 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 6 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 4 }
   ],
   "genus": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
   "though": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
@@ -134,14 +79,6 @@
   "related": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
   "species": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
   "appear": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
-  "in": [
-    { "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 4 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }
-  ],
   "fossil": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
   "record": [{ "URL": "https://vm009.rz.uos.de/crawl/index.html", "freq": 1 }],
   "1": [
@@ -160,14 +97,6 @@
     { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 2 },
     { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }
   ],
-  "this": [
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
-  ],
   "unique": [
     { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
     { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 1 }
@@ -179,12 +108,6 @@
   "make": [
     { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
     { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 1 }
-  ],
-  "it": [
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 4 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }
   ],
   "important": [
     { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
@@ -230,35 +153,17 @@
     { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }
   ],
   "peoples": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
-  "who": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
   "also": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
   "used": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
   "hunt": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
-  "for": [
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }
-  ],
   "food": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
-  "has": [
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
-  ],
   "appeared": [
     { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }
-  ],
-  "as": [
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
   ],
   "national": [
     { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }
   ],
   "mascot": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
-  "on": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
   "reverse": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
   "australian": [
     { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }
@@ -266,10 +171,6 @@
   "twenty": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
   "cent": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
   "coin": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
-  "an": [
-    { "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }
-  ],
   "emblem": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
   "state": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
   "new": [{ "URL": "https://vm009.rz.uos.de/crawl/page3.html", "freq": 1 }],
@@ -296,38 +197,23 @@
     { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
   ],
   "coded": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
-  "with": [
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 3 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
-  ],
   "fins": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "deft": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
-  "while": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "debugged": [
     { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }
   ],
   "every": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "breath": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "left": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
-  "did": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
-  "you": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "know": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "said": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "plat": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "glint": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
-  "his": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "eye": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
-  "that": [
-    { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 2 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
-  ],
-  "i": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 3 }],
   "m": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "lays": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "eggs": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "oh": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
-  "my": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "chuckled": [
     { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }
   ],
@@ -338,7 +224,6 @@
     { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
   ],
   "might": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 2 }],
-  "but": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "can": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "t": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "run": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
@@ -350,7 +235,6 @@
     { "URL": "https://vm009.rz.uos.de/crawl/page2.html", "freq": 1 },
     { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }
   ],
-  "they": [{ "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }],
   "ventured": [
     { "URL": "https://vm009.rz.uos.de/crawl/page6.html", "freq": 1 }
   ],
@@ -446,10 +330,6 @@
     { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }
   ],
   "years": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
-  "been": [
-    { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 },
-    { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
-  ],
   "depicted": [
     { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }
   ],
@@ -478,7 +358,6 @@
   "renaissance": [
     { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }
   ],
-  "was": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
   "commonly": [
     { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }
   ],
@@ -499,14 +378,11 @@
   ],
   "purity": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
   "grace": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
-  "which": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
   "could": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
-  "be": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
   "captured": [
     { "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }
   ],
   "only": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
-  "by": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
   "virgin": [{ "URL": "https://vm009.rz.uos.de/crawl/page5.html", "freq": 1 }],
   "unusual": [{ "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }],
   "appearance": [
@@ -518,7 +394,6 @@
   "tailed": [{ "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }],
   "otter": [{ "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }],
   "footed": [{ "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }],
-  "at": [{ "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }],
   "baffled": [{ "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }],
   "naturalists": [
     { "URL": "https://vm009.rz.uos.de/crawl/page1.html", "freq": 1 }
@@ -540,6 +415,5 @@
   "projecting": [
     { "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }
   ],
-  "from": [{ "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }],
   "forehead": [{ "URL": "https://vm009.rz.uos.de/crawl/page4.html", "freq": 1 }]
 }

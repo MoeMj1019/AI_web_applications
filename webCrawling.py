@@ -1,123 +1,32 @@
 from databaseIndex import DatabaseIndex
+from url_index import Url_Index
+from crawler.constraints import *
+from crawler.crawler_util import IGNORED_WORDS, get_full_urls
+
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
-from collections import Counter
 from urllib.parse import urljoin , urlparse
+from collections import Counter
+from datetime import datetime
 import re
+import logging
 
-# create a Crawler (with url and response constraints)
-#     give it one or more urls to start with
-#     according to the search method, it will start crawling
-#         get a url
-#         check if it is valid / wanted to send a request to it
-#             send a request and get the response
-#         else 
-#             go to the next url and repeat
-#         check if the response is valid / wanted to process it
-#             process the response and get the urls and the info
-#             add the current url and the info to the index ( or return them .. etc)
-#             add the extracted urls to the list of urls to visit
-#         else 
-#             go to the next url and repeat
+logging.basicConfig(level=logging.INFO)
 
 # TODO :
-#       - visited recently
-#       - write consequently to a file / database
-#       - improve search method
-#
+#       - improve search/traverse method
+#       - multi-threading
+#       - unify time fomats or handel them
+#       - write sequentially to a file / database
 #       --- optemize
 
-# -------------------------------------------------------------------
-# -------------------------------------------------------------------
-# -------------------------------------------------------------------
-# -------------------------------------------------------------------
 
-IGNORED_WORDS = set([
-            "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", 
-            "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", 
-            "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", 
-            "theirs", "themselves", "what", "which", "who", "whom", "this", "that", 
-            "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", 
-            "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", 
-            "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", 
-            "at", "by", "for", "with", "about", "against", "between", "into", "through", 
-            "during", "before", "after", "above", "below", "to", "from", "up", "down", 
-            "in", "out", "on", "off", "over", "under", "again", "further", "then", "once"
-        ])
-
-
-def get_full_urls(base_url, urls:list):
-    standarized_urls = []
-    for url in urls:
-        absolute_url = urljoin(base_url, url)
-        standarized_urls.append(absolute_url)
-    return standarized_urls
-
-# ------------------------- constraints ----------------------------
-# ------------------------------------------------------------------
-# ------------------------------------------------------------------
-class constraint:
-    def __init__(self) -> None:
-        pass
-    def __call__(self, *args, **kwargs):
-        return self.evaluate(*args, **kwargs)
-    
-class url_constraint(constraint):
-    def __init__(self) -> None:
-        super().__init__()
-    def evaluate(self, url):
-        pass
-
-class response_constraint(constraint):
-    def __init__(self) -> None:
-        super().__init__()
-    def evaluate(self, response):
-        pass
-
-# ------------------------- response constraint -----------------------------------
-class valid_status_code(response_constraint):
-    def __init__(self) -> None:
-        super().__init__()
-    def evaluate(self, response):
-        return response.status_code == 200
-
-class valid_content_type(response_constraint):
-    def __init__(self) -> None:
-        super().__init__()
-    def evaluate(self, response):
-        return "text/html" in response.headers["Content-Type"]
-    
-# ------------------------- url constraint -----------------------------------------
-class same_domain(url_constraint):
-    def __init__(self, root_urls:list="", allow_subdomains=False) -> None:
-        super().__init__()
-        self.allow_subdomains = allow_subdomains
-        try:
-            self.domains = [urlparse(url).netloc for url in root_urls]
-        except TypeError as e:
-            print(e)
-            self.domains = [urlparse(root_urls).netloc]
-
-    def evaluate(self, url):
-        url_domain = urlparse(url).netloc
-
-        if self.allow_subdomains:
-            for domain in self.domains:
-                return domain == url_domain or url_domain.endswith("." + domain)
-        else:
-            return url_domain in self.domains
-        
-class valid_file_extension(url_constraint):
-    def __init__(self, extensions:list=[]) -> None:
-        super().__init__()
-        self.extensions = list(extensions)
-
-    def evaluate(self, url):
-        parsed_url = urlparse(url)
-        suffix = parsed_url.path.split('/')[-1].split('.')[-1] if '.' in parsed_url.path else ""
-        return suffix in self.extensions
-
+#      ------------ maybe ------------
+#       - memory issues when scalling up:
+#           - put limits on in-memory data ( e.g. end process and start new one with one of the unvisited urls)
+#           - write/read intermediate urls to/from a database ( for storage on larger scale)
+#           -  
+# ---------------------------------------------------------------------------------
 
 
 # -------------------------------------------------------------------
@@ -125,141 +34,264 @@ class valid_file_extension(url_constraint):
 # -------------------------- Crawler Class --------------------------
 
 class Crawler:
-    def __init__(self, index: DatabaseIndex = None, useRawOutput=False,
-                url_constraints:list=None, response_constraints:list=None,
-                stay_in_domain=False):
+    def __init__(self, *root_urls,
+                search_index:DatabaseIndex = None, url_index:Url_Index=None,
+                url_constraints:list=None, response_constraints:list=None):
         
-        self.stay_in_domain = stay_in_domain
-        self.useRawOutput = useRawOutput
+        self.root_urls = list(root_urls)
 
-        if index:
-            self.index = index
+        if search_index:
+            self.search_index = search_index
         else:
-            self.index = DatabaseIndex()
+            self.search_index = DatabaseIndex()
+        if url_index:
+            self.url_index = url_index
+        else:    
+            self.url_index = Url_Index()
 
         try:
             iter(url_constraints)
         except TypeError:
-            print("url_constraints is not iterable")
+            print("url_constraints should be iterable")
             self.url_constraints = []
         else:
             self.url_constraints = list(url_constraints)
-
         try:
             iter(response_constraints)
         except TypeError:
-            print("response_constraints is not iterable")
+            print("response_constraints should be iterable")
             self.response_constraints = [] 
         else:
             self.response_constraints = list(response_constraints)
 
-        # if stay_in_domain:
-        #     self.url_constraints.append(is_same_domain())
+        self.validate_constraints() # make sure the constraints are valid and fit them to the crawler
 
-    def run(self,*root_urls, search_method="bfs", max_iterations=1000, stay_in_domain=True):
+    def run(self, search_method:str="bfs", max_iterations:int=1000, requests_timeout:int=8):
+        """
+        start the crawling process
+        args:
+            search_method: str, default="bfs", options=["bfs", "dfs"]
+            max_iterations: int, default=1000
+            requests_timeout: int, default=8(s)
+        """
+        # if search_method == "bfs" -> pop(0) -> then the urls_to_visit list will be a queue (FIFO)
+        # if search_method == "dfs" -> pop(-1)-> then the urls_to_visit list will be a stack (LIFO)
+        very_simple_search_variable = 0 if search_method == "bfs" else -1
 
-        urls_to_visit = list(root_urls)
+        urls_to_visit = list(self.root_urls) 
         visited_urls = set()
+
         iteration = 0
-
-        if self.stay_in_domain:
-            self.url_constraints.append(same_domain(root_urls, allow_subdomains=True))
-
         while len(urls_to_visit) > 0 and iteration < max_iterations:
             iteration += 1
 
-            url = urls_to_visit.pop()
-            print("URL: ", url)
-            if url in visited_urls:
-                continue
+            logging.info(f" {'#'*10} iteration {iteration} {'#'*10}")
 
-            response = None
+            url = urls_to_visit.pop(very_simple_search_variable) # get the next url to visit
+            logging.info(f" URL: {url}")
 
-            if not self.url_requeust_valid(url=url): # url is visited recently, url refers to data .. etc
+            if url in visited_urls: # check if the url is visited before
                 continue
+            logging.debug(" - not visited before")
+
+            if not self.url_requeust_valid(url=url): # check if the url fulfills all constraints, if not, skip it
+                continue
+            logging.debug(" - valid url")
 
             # get the response
+            response = None
             try:
-                response = requests.get(url, timeout=8)
+                response = requests.get(url, timeout=requests_timeout)
             except:
                 print(f"Error in getting the response to the url:{url}")
                 continue
 
-            if self.url_process_valid(response):  # TODO check for other statues as well and sort them out
-                print("Processing: ", url)
-                urls, info = self.process_content(url, response.text)
+            if not self.url_process_valid(response): # check if the response fulfills all constraints, if not, skip it
+                continue
+            logging.debug(" - valid response")
 
-                for item in urls:
-                    urls_to_visit.append(item)
+            logging.debug(" - Processing")
+            urls, info = self.process_content(url, response) # process the content of the response and extract the urls and info
+            logging.debug(" - Done processing")
 
-                self.add_to_index(url, info)
-                print("Done processing: ", url)
+            for item in urls: # add the extracted urls to the urls_to_visit list
+                urls_to_visit.append(item) 
 
-                visited_urls.add(url)
+            self.add_to_index(url, info) # add extracted url and info to the search index and url index
+            logging.debug(" - Added to index")
+
+            visited_urls.add(url) # update the visited urls set
 
 
-    def url_requeust_valid(self, url):
-        for rule in self.url_constraints:
+    def url_requeust_valid(self, url:str):
+        """
+        check if the url fulfills url constraints
+            args:
+                url: str
+            returns:
+                bool
+        """
+        # execlude the visited recently constraint from the url constraints
+        # it will be checked later for wether the info should be processed or not
+        # but it has nothing to do with the url validity itself, 
+        # we still need to extract the urls from it and continue crawling
+        rules_to_apply = [rule for rule in self.url_constraints if isinstance(rule, UrlConstraint) and not isinstance(rule, VisitedRecently)]
+        
+        for rule in rules_to_apply:
             if not rule(url):
+                logging.debug(f" - rule {rule} failed")
                 return False
         return True
     
-    def url_process_valid(self ,response): # the rules are functions that should evaluate to true ( the conditions that should be met)
+    def url_process_valid(self ,response:requests.models.Response):
+        """
+        check if the response fulfills response constraints
+            args:
+                response: requests.models.Response
+            returns:
+                bool
+        """
         for rule in self.response_constraints:
             if not rule(response):
+                logging.debug(f" - rule {rule} failed")
                 return False
         return True
 
-    def add_to_index(self, url, info):
-        for word, count in info.items():
-            self.index.add(word, url, count)
-
-    def process_content(self, url, raw_html_content):
+    def process_content(self, url:str, resopnse:requests.models.Response):
+        """
+        process the content of the response and extract the urls and info
+            args:
+                url: str
+                resopnse: requests.models.Response
+            returns:
+                urls: list of urls
+                info: dict of words : counts
+        """
+        # TODO : handle other content types than html / text
+        raw_html_content = resopnse.text
         soup = BeautifulSoup(raw_html_content, "html.parser")
 
         urls = self.get_urls(url, soup)
-        info = self.get_info(soup)
+        info = self.get_info(url, soup)
 
         return urls, info
 
-    def get_urls(self, url, html_content: BeautifulSoup):
+    def get_urls(self, url:str, html_content:BeautifulSoup):
+        """
+        extract the urls from the html content
+            args:
+                url: str
+                html_content: BeautifulSoup
+            returns:
+                list of urls
+        """
         new_urls = [a["href"] for a in html_content.find_all("a") if a.has_attr("href")]
         base_url = html_content.find("base")
         try:
             base_url = base_url["href"]
         except :
-            print(f"No base url found for this page : {url}")
+            logging.warning(f" No base url found for this page : {url}")
             base_url = url
         
         standarized_urls = get_full_urls(base_url, new_urls)
 
         return standarized_urls
 
-    def get_info(self, html_content: BeautifulSoup):  # TODO more enformations
+    def get_info(self,url:str, html_content: BeautifulSoup):  # TODO more enformations
+        """
+        extract the info from the html content
+        get words and their counts
+            args:
+                url: str
+                html_content: BeautifulSoup
+            returns:
+                dict of words : counts
+        """
+        global IGNORED_WORDS
+
+        # check if the url is visited recently/not visited recently
+        for rule in self.url_constraints:
+            if isinstance(rule, VisitedRecently):
+                if not rule(url):
+                    logging.debug(f" - recently visited, no info processing")
+                    return dict()
+        
         text = html_content.text
         words = re.findall(r'\b\w+\b', text.lower())
         
-        global IGNORED_WORDS
         words = [word for word in words if word not in IGNORED_WORDS]
         
         words_counts = Counter(words)
-        return words_counts
+        return words_counts # dict of words : counts
 
-    def is_visited_recently(self, url):
-        return False
+    def add_to_index(self, url, info):
+        """
+        add the extracted url and info to the search index
+        add the url to the unique urls index with the current timestamp of this visit
+            args:
+                url: str
+                info: dict of words : counts
+        """
+        # add an entries to the search index
+        for word, count in info.items():
+            self.search_index.add(word, url, count)
+        # add the url to the unique urls index with the current timestamp
+        self.url_index.add(url, datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+
+    def validate_constraints(self):
+        """
+        check if the constraints are valid and fit them to the crawler
+        """
+        for constraint in self.url_constraints:
+            if isinstance(constraint, VisitedRecently): # TODO do it better
+                constraint.set_url_index(self.url_index) # initialize the look_up_index
+            if isinstance(constraint, SameDomain):
+                constraint.set_domain_urls(self.root_urls) # initialize the root_urls, from whtich the domains will be extracted
+            if not isinstance(constraint, UrlConstraint): # check if all url constraint are of type url_constraint
+                raise TypeError("url_constraints should be a list of objects of type url_constraints")
+        
+        for constraint in self.response_constraints:
+            if not isinstance(constraint, ResponseConstraint): # check if all response constraint are of type response_constraint
+                raise TypeError("response_constraints should be a list of objects of type response_constraints")
+
 
 
 if __name__ == "__main__":
+    # settings
     allowed_extensions = ["","html", "htm", "xml","asp","php","jsp","xhtml","shtml","xml","json"]
-    c = Crawler(
-        url_constraints=[valid_file_extension(allowed_extensions)],
-        response_constraints=[valid_status_code(), valid_content_type()],
-        stay_in_domain=True,
-    )
-    c.run(
+    constraints_for_url = [SameDomain(allow_subdomains=True),NotVisitedRecently(time_delta=1, time_unit="days")]
+    constraints_for_response = [ValidStatusCode(), ValidContentType()]
+
+    # initialize the crawler 
+    my_crawler = Crawler(
         "https://vm009.rz.uos.de/crawl/index.html",
-        search_method="bfs",
-        max_iterations=1000,
+        url_constraints=[SameDomain(allow_subdomains=True),NotVisitedRecently(time_delta=1, time_unit="days")],
+        response_constraints=[ValidStatusCode(), ValidContentType()],
     )
 
-    c.index.safeData()
+    # start crawling
+    my_crawler.run(
+        search_method="dfs",
+        max_iterations=100,
+    )
+
+    # save the data
+    my_crawler.search_index.saveData()
+    my_crawler.url_index.safe_data()
+
+    # initialize the crawler 
+    # my_crawler_1 = Crawler(
+    #     "https://vm009.rz.uos.de/crawl/index.html",
+    #     url_constraints=[NotVisitedRecently(time_delta=1, time_unit="days")],
+    #     response_constraints=constraints_for_response,
+    # )
+
+    # # start crawling
+    # my_crawler_1.run(
+    #     search_method="bfs",
+    #     max_iterations=1000,
+    # )
+
+    # # save the data
+    # my_crawler_1.search_index.saveData()
+    # my_crawler_1.url_index.safe_data()

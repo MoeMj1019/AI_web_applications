@@ -56,6 +56,4 @@ class Query_Parser:
         #sort the self.URLWordOccurent
         self.URLWordOccurent.sort(key=lambda x: x[1], reverse=True)
         self.URLWordOccurent = sorted(self.URLWordOccurent, key=lambda x: x[2], reverse=True)
-        print(f"###########  {self.URLWordOccurent} ##########")
-
     

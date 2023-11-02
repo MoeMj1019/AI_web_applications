@@ -1,22 +1,36 @@
 import json
 
+# # text processing
+import nltk
+from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+nltk.download('punkt')
+nltk.download('stopwords')
+stemmer = PorterStemmer()
+
+
 class Query_Parser:
     def __init__(self, index_path="safedIndexDataBase.json") -> None:
         self.index_path = index_path
-        self.sentence = str
-        self.words = list
         self.my_dict = dict()
         self.URLWordOccurent = list()
         #load the Index Data Base (Word->Links)
         with open(self.index_path, 'r') as json_file:
             self.my_dict = json.load(json_file)
 
+    def getStemWords(self, SearchString):
+        self.sentence = SearchString
+        stop_words = set(stopwords.words('english'))
+        #extract tokenized stem words from the tet
+        words = [stemmer.stem(word) for word in word_tokenize(self.sentence.lower())
+            if word.isalpha() and word not in stop_words]
+        return words
 
     def simpleSearch(self, SearchString):
-        self.sentence = SearchString
-        self.words = SearchString.split()
-        #print(self.words)
-        for word in self.words:
+        words = self.getStemWords(SearchString)
+
+        for word in words:
             if word in self.my_dict:
                 for entry in self.my_dict[word]:
                     url = entry["URL"]              #extract the url and the freq from a mached result (word found in databese)
@@ -35,10 +49,13 @@ class Query_Parser:
             else:
                 continue
 
+        self.sortFoundedURLs()
         return self.URLWordOccurent
     
     def sortFoundedURLs(self):
         #sort the self.URLWordOccurent
-        pass
+        self.URLWordOccurent.sort(key=lambda x: x[1], reverse=True)
+        self.URLWordOccurent = sorted(self.URLWordOccurent, key=lambda x: x[2], reverse=True)
+        print(f"###########  {self.URLWordOccurent} ##########")
 
     

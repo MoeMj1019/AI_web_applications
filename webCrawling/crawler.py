@@ -10,6 +10,19 @@ from datetime import datetime
 import re
 import logging
 
+# text processing
+import nltk
+from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download('punkt')
+nltk.download('stopwords')
+stemmer = PorterStemmer()
+# extract tokenized stem words from the text
+# tokens = [stemmer.stem(word) for word in word_tokenize(text.lower())
+#                   if word.isalpha() and word not in self.stop_words]
+
 logging.basicConfig(level=logging.INFO)
 
 # TODO :
@@ -42,7 +55,7 @@ class Crawler:
                 url_constraints:list=None, response_constraints:list=None):
         
         self.root_urls = list(root_urls)
-
+        self.stop_words = set(stopwords.words('english'))
         if search_index:
             self.search_index = search_index
         else:
@@ -220,11 +233,13 @@ class Crawler:
                     return dict()
         
         text = html_content.text
-        words = re.findall(r'\b\w+\b', text.lower())
+
+        tokens = [stemmer.stem(word) for word in word_tokenize(text.lower())
+                                if word.isalpha() and word not in self.stop_words]
+        # tokens = re.findall(r'\b\w+\b', text.lower())
+        # tokens = [word for word in tokens if word not in IGNORED_WORDS]
         
-        words = [word for word in words if word not in IGNORED_WORDS]
-        
-        words_counts = Counter(words)
+        words_counts = Counter(tokens)
         return words_counts # dict of words : counts
 
     def add_to_index(self, url, info):

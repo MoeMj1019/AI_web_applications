@@ -26,14 +26,14 @@ if __name__ == "__main__":
     # initialize the crawler 
     my_crawler_1 = Crawler(
         "https://vm009.rz.uos.de/crawl/index.html",
-        url_constraints=[NotVisitedRecently(time_delta=1, time_unit="days")],
+        url_constraints=[NotVisitedRecently(time_delta=1, time_unit="days"), SameDomain(allow_subdomains=True)],
         response_constraints=constraints_for_response,
     )
 
     # start crawling
     my_crawler_1.run(
         search_method="bfs",
-        max_iterations=1,
+        max_iterations=100,
     )
 
     # save the data

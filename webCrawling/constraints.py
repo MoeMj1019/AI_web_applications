@@ -1,4 +1,4 @@
-from crawler.crawler_util import normalize_time_units
+from .crawler_util import normalize_time_units
 from url_index import Url_Index
 from urllib.parse import urljoin , urlparse
 from datetime import datetime

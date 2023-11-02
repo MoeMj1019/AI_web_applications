@@ -1,11 +1,10 @@
 from databaseIndex import DatabaseIndex
 from url_index import Url_Index
-from crawler.constraints import *
-from crawler.crawler_util import IGNORED_WORDS, get_full_urls
+from .constraints import *
+from .crawler_util import IGNORED_WORDS, get_full_urls
 
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin , urlparse
 from collections import Counter
 from datetime import datetime
 import re
@@ -14,17 +13,21 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 # TODO :
+#       - move the information extraction to a seperate class (index, or info_extractor) it's not the crawler's job
 #       - improve search/traverse method
 #       - multi-threading
 #       - unify time fomats or handel them
 #       - write sequentially to a file / database
-#       --- optemize
-
-
+#       - handle robots.txt
+#       - deal with query parameters in urls
+#       - decide what to do with other data types (eg get the text from pdf files, description from images, videos, etc)    
+#       --- optemize if needed ---
+#
+#
 #      ------------ maybe ------------
 #       - memory issues when scalling up:
-#           - put limits on in-memory data ( e.g. end process and start new one with one of the unvisited urls)
 #           - write/read intermediate urls to/from a database ( for storage on larger scale)
+#           - put limits on in-memory data ( e.g. end process and start new one with one of the unvisited urls)
 #           -  
 # ---------------------------------------------------------------------------------
 
@@ -66,7 +69,7 @@ class Crawler:
 
         self.validate_constraints() # make sure the constraints are valid and fit them to the crawler
 
-    def run(self, search_method:str="bfs", max_iterations:int=1000, requests_timeout:int=8):
+    def run(self, search_method:str="dfs", max_iterations:int=1000, requests_timeout:int=8):
         """
         start the crawling process
         args:
@@ -75,7 +78,7 @@ class Crawler:
             requests_timeout: int, default=8(s)
         """
         # if search_method == "bfs" -> pop(0) -> then the urls_to_visit list will be a queue (FIFO)
-        # if search_method == "dfs" -> pop(-1)-> then the urls_to_visit list will be a stack (LIFO)
+        # if ( else for now ) search_method == "dfs" -> pop(-1)-> then the urls_to_visit list will be a stack (LIFO)
         very_simple_search_variable = 0 if search_method == "bfs" else -1
 
         urls_to_visit = list(self.root_urls) 
@@ -256,42 +259,3 @@ class Crawler:
 
 
 
-if __name__ == "__main__":
-    # settings
-    allowed_extensions = ["","html", "htm", "xml","asp","php","jsp","xhtml","shtml","xml","json"]
-    constraints_for_url = [SameDomain(allow_subdomains=True),NotVisitedRecently(time_delta=1, time_unit="days")]
-    constraints_for_response = [ValidStatusCode(), ValidContentType()]
-
-    # # initialize the crawler 
-    # my_crawler = Crawler(
-    #     "https://vm009.rz.uos.de/crawl/index.html",
-    #     url_constraints=[SameDomain(allow_subdomains=True),NotVisitedRecently(time_delta=1, time_unit="days")],
-    #     response_constraints=[ValidStatusCode(), ValidContentType()],
-    # )
-
-    # # start crawling
-    # my_crawler.run(
-    #     search_method="dfs",
-    #     max_iterations=100,
-    # )
-
-    # # save the data
-    # my_crawler.search_index.saveData()
-    # my_crawler.url_index.safe_data()
-
-    # initialize the crawler 
-    my_crawler_1 = Crawler(
-        "https://vm009.rz.uos.de/crawl/index.html",
-        url_constraints=[NotVisitedRecently(time_delta=1, time_unit="days")],
-        response_constraints=constraints_for_response,
-    )
-
-    # start crawling
-    my_crawler_1.run(
-        search_method="bfs",
-        max_iterations=1000,
-    )
-
-    # save the data
-    my_crawler_1.search_index.saveData()
-    my_crawler_1.url_index.safe_data()

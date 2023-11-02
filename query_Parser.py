@@ -15,7 +15,7 @@ class Query_Parser:
     def simpleSearch(self, SearchString):
         self.sentence = SearchString
         self.words = SearchString.split()
-        print(self.words)
+        #print(self.words)
         for word in self.words:
             if word in self.my_dict:
                 for entry in self.my_dict[word]:
@@ -25,7 +25,7 @@ class Query_Parser:
                     for element in self.URLWordOccurent:
                         if element[0] == url:
                             element[1] = int(element[1]) + freq 
-                            element[2] += 1                     #because we exluded in our database tha a key can have the same url value two time, so it musst be the an other key that has the same link (i hope)
+                            element[2] += 1                     #because we excluded in our database that a key can have the same url value two time, so it musst be the an other key that has the same link (i hope)
                             #print(f"type of element[1] is {type(element[1])} and type of freq is{type(freq)}")
                             found = True
                             #print("entry found (mached)")
@@ -36,5 +36,9 @@ class Query_Parser:
                 continue
 
         return self.URLWordOccurent
+    
+    def sortFoundedURLs(self):
+        #sort the self.URLWordOccurent
+        pass
 
     

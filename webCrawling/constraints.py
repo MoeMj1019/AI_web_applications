@@ -46,12 +46,19 @@ class SameDomain(UrlConstraint): # TODO handle redirects
 
     def evaluate(self, url):
         url_domain = urlparse(url).netloc
-
         if self.allow_subdomains:
             for domain in self.__domains:
-                return domain == url_domain or url_domain.endswith("." + domain)
+                if domain == url_domain or url_domain.endswith("." + domain):
+                    return True
+            return False
+            # return any([domain == url_domain or url_domain.endswith("." + domain) for domain in self.__domains ]) 
         else:
-            return url_domain in self.__domains
+            for domain in self.__domains:
+                if domain == url_domain:
+                    return True
+            return False
+            # return any([domain == url_domain for domain in self.__domains ]) 
+            
         
     def set_domain_urls(self, domain_urls:list):
         self.__domain_urls = domain_urls
@@ -60,6 +67,8 @@ class SameDomain(UrlConstraint): # TODO handle redirects
         except TypeError as e:
             print(e)
             self.__domains = [urlparse(domain_urls).netloc]
+        
+
     
 class VisitedRecently(UrlConstraint):
     def __init__(self,look_up_index:Url_Index=None ,time_delta=60, time_unit="seconds") -> None:
@@ -70,9 +79,12 @@ class VisitedRecently(UrlConstraint):
 
         self.set_url_index(look_up_index)
         
-    def evaluate(self, url:str):
+    def evaluate(self, url:str): # TODO better logic / handle elements not found 
         try:
             last_visit = self.__look_up_index.get(url,"time_stamp")
+            if not isinstance(last_visit, str):
+                return False
+            
             last_visit = datetime.strptime(last_visit, "%d/%m/%Y %H:%M:%S")
             time_diff = (datetime.now() - last_visit).total_seconds()
             return time_diff < self.__time_delta_normalized

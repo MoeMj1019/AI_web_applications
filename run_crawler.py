@@ -6,36 +6,19 @@ if __name__ == "__main__":
     constraints_for_url = [SameDomain(allow_subdomains=True),NotVisitedRecently(time_delta=1, time_unit="days")]
     constraints_for_response = [ValidStatusCode(), ValidContentType()]
 
-    # # initialize the crawler 
-    # my_crawler = Crawler(
-    #     "https://vm009.rz.uos.de/crawl/index.html",
-    #     url_constraints=[SameDomain(allow_subdomains=True),NotVisitedRecently(time_delta=1, time_unit="days")],
-    #     response_constraints=[ValidStatusCode(), ValidContentType()],
-    # )
-
-    # # start crawling
-    # my_crawler.run(
-    #     search_method="dfs",
-    #     max_iterations=100,
-    # )
-
-    # # save the data
-    # my_crawler.search_index.saveData()
-    # my_crawler.url_index.safe_data()
-
     # initialize the crawler 
-    my_crawler_1 = Crawler(
-        "https://vm009.rz.uos.de/crawl/index.html",
-        url_constraints=[NotVisitedRecently(time_delta=1, time_unit="days"), SameDomain(allow_subdomains=True)],
-        response_constraints=constraints_for_response,
+    my_crawler = Crawler(
+        "https://vm009.rz.uos.de/crawl/index.html","https://www.uni-osnabrueck.de/startseite/","https://en.wikipedia.org/wiki/Cognitive_science",
+        url_constraints=[SameDomain(allow_subdomains=True),NotVisitedRecently(time_delta=1, time_unit="days"),ValidFileExtension(allowed_extensions)],
+        response_constraints=[ValidStatusCode(), ValidContentType()],
     )
 
     # start crawling
-    my_crawler_1.run(
+    my_crawler.run(
         search_method="bfs",
-        max_iterations=100,
+        max_iterations=1000,
     )
 
     # save the data
-    my_crawler_1.search_index.saveData()
-    my_crawler_1.url_index.safe_data()
+    my_crawler.search_index.saveData()
+    my_crawler.url_index.safe_data()

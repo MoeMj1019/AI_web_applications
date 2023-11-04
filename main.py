@@ -1,9 +1,12 @@
 # regulate the whole process of the program
 
+# TODO:
+#   - improve the searching process ?
+
 # IDEAS:
 #   - let user provide a list of urls / domains / topics to for the next run of the crawler
 
-from webCrawling import WebIndex
+from WebSearchEngine.index import WebIndex
 from argparse import ArgumentParser
 
 def get_args():

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from webCrawling.index import WebIndex
+from WebSearchEngine.index import WebIndex
 from argparse import ArgumentParser
 
 

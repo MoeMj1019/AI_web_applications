@@ -1,4 +1,7 @@
-from webCrawling import *
+from WebSearchEngine.crawler import Crawler
+from WebSearchEngine.index import WebIndex
+from WebSearchEngine.constraints import *
+
 from argparse import ArgumentParser
 
 def get_args():

@@ -1,26 +1,103 @@
-<!-- templates/result.html -->
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Word Processing Result</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Search Results - WebZone Search</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background: #f8f9fa;
+            }
+            header {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                margin-bottom: 30px;
+            }
+            header h1 {
+                margin-bottom: 10px;
+            }
+            header form {
+                width: 100%;
+                max-width: 500px;
+            }
+            header input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 1em;
+            }
+            header input[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                background-color: #007bff;
+                color: white;
+                font-size: 1em;
+                cursor: pointer;
+            }
+            header input[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+            .result-list {
+                list-style: none;
+                padding: 0;
+            }
+            .result-list li {
+                background: white;
+                margin-bottom: 10px;
+                padding: 15px;
+                border-radius: 5px;
+            }
+            .result-list li a {
+                color: blue;
+                text-decoration: none;
+            }
+            .result-list li a:hover {
+                text-decoration: underline;
+            }
+            .url {
+                color: #006621;
+            }
+            .highlight {
+                color: #1e222b;
+            }
+            .description {
+                color: #545454;
+            }
+            .last-updated {
+                color: #666;
+                font-size: 0.9em;
+            }
+        </style>
     </head>
     <body>
-        <h1>Processing Result</h1>
-        <form action="/process" method="post">
-            <input type="text" name="word" />
-            <input type="submit" value="Submit" />
-        </form>
-        <p>Original Word: {{ processed_word }}</p>
-
-        <h2>Links and Information:</h2>
-        <ul>
+        <header>
+            <h1>WebZone Search</h1>
+            <form action="/search" method="get">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search again..." autofocus />
+                <input type="submit" value="Search" />
+            </form>
+        </header>
+        <h2>Your Search Results for : {{ query }}</h2>
+        <ul class="result-list">
             {% for link_info in links_info %}
-            <li>Link: <a href="{{ link_info[0] }}">{{ link_info[0] }}</a></li>
-            <ul>
-                <li>Frequency: {{ link_info[1] }}</li>
-                <li>Searched Words: {{ link_info[2] }}</li>
-            </ul>
+            <li>
+                <a href="{{ link_info['url'] }}">
+                    <h3>{{ link_info.get('title', link_info['url']) }}</h3>
+                </a>
+                <p class="url">{{ link_info['url'] }}</p>
+                <p class="highlight">{{ link_info.get('highlight','No highlight available' ) }}</p>
+                <p class="description">{{ link_info.get('description', 'No description available.') }}</p>
+                <p class="last-updated">Last updated: {{ link_info.get('time_stamp', 'Not available') }}</p>
+            </li>
             {% endfor %}
         </ul>
     </body>

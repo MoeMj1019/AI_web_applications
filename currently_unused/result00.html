@@ -1,0 +1,45 @@
+<!-- templates/result.html -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>search result</title>
+
+        <style>
+            body {
+                margin-left: 10%;
+            }
+            #p_url {
+                color: blue;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Enter a Query:</h1>
+        <form action="/search" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Submit" />
+        </form>
+        <h1>your search Result</h1>
+        <p>Original Word: {{ query }}</p>
+
+        <h2>Links and Information:</h2>
+        <ul>
+            {% for link_info in links_info %}
+            <li>
+                <a href="{{ link_info['url'] }}">
+                    <div>
+                        {{ link_info.get('title', link_info['url']) }}
+                        <p id="p_url">{{ link_info['url'] }}</p>
+                    </div>
+                </a>
+            </li>
+            <ul>
+                <!-- <li><p id="p_url">{{ link_info['url'] }}</p></li> -->
+                <li>description: {{ link_info.get('description', '') }}</li>
+                <li>last updated: {{ link_info.get('time_stamp', '') }}</li>
+            </ul>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

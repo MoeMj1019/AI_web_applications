@@ -1,46 +1,29 @@
-from databaseIndex import DatabaseIndex
-from url_index import Url_Index
 from .constraints import *
-from .crawler_util import IGNORED_WORDS, get_full_urls
+from .index import WebIndex
+from .parser import InfoParser
+from .crawler_util import get_full_urls
 
 import requests
 from bs4 import BeautifulSoup
-from collections import Counter
-from datetime import datetime
-import re
 import logging
-
-# text processing
-import nltk
-from nltk.stem import PorterStemmer
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-
-nltk.download('punkt')
-nltk.download('stopwords')
-stemmer = PorterStemmer()
-# extract tokenized stem words from the text
-# tokens = [stemmer.stem(word) for word in word_tokenize(text.lower())
-#                   if word.isalpha() and word not in self.stop_words]
 
 logging.basicConfig(level=logging.INFO)
 
 # TODO :
-#       - move the information extraction to a seperate class (index, or info_extractor) it's not the crawler's job
-#       - improve search/traverse method
+#       - write results of each step ( crawling, info extraction, indexing) seperatly to a file/index
+#               --> way better seperation of concerns/tasks/checks and better debugging
+#       - add default constraints for blausible behaviour without configuration
+#       - more advanced traversing/search methods ?? ( sofar only simple bfs and dfs)
 #       - multi-threading
-#       - unify time fomats or handel them
-#       - write sequentially to a file / database
 #       - handle robots.txt
 #       - deal with query parameters in urls
 #       - decide what to do with other data types (eg get the text from pdf files, description from images, videos, etc)    
-#       --- optemize if needed ---
+#       --- optemize where needed ---
 #
 #
 #      ------------ maybe ------------
 #       - memory issues when scalling up:
-#           - write/read intermediate urls to/from a database ( for storage on larger scale)
-#           - put limits on in-memory data ( e.g. end process and start new one with one of the unvisited urls)
+#           - put limits on in-memory data
 #           -  
 # ---------------------------------------------------------------------------------
 
@@ -49,21 +32,26 @@ logging.basicConfig(level=logging.INFO)
 # -------------------------------------------------------------------
 # -------------------------- Crawler Class --------------------------
 
+
 class Crawler:
     def __init__(self, *root_urls,
-                search_index:DatabaseIndex = None, url_index:Url_Index=None,
-                url_constraints:list=None, response_constraints:list=None):
+                search_index:WebIndex = None,
+                info_parser:InfoParser = None,
+                url_constraints:list=None, 
+                response_constraints:list=None, 
+                infoExtraction_constraints:list=None):
         
         self.root_urls = list(root_urls)
-        self.stop_words = set(stopwords.words('english'))
+
+        if info_parser:
+            self.info_parser = info_parser
+        else:
+            self.info_parser = InfoParser()
+
         if search_index:
             self.search_index = search_index
         else:
-            self.search_index = DatabaseIndex()
-        if url_index:
-            self.url_index = url_index
-        else:    
-            self.url_index = Url_Index()
+            self.search_index = WebIndex()
 
         try:
             iter(url_constraints)
@@ -79,16 +67,23 @@ class Crawler:
             self.response_constraints = [] 
         else:
             self.response_constraints = list(response_constraints)
+        try:
+            iter(infoExtraction_constraints)
+        except TypeError:
+            print("infoExtraction_constraints should be iterable")
+            self.infoExtraction_constraints = []
+        else:
+            self.infoExtraction_constraints = list(infoExtraction_constraints)
 
         self.validate_constraints() # make sure the constraints are valid and fit them to the crawler
 
-    def run(self, search_method:str="dfs", max_iterations:int=1000, requests_timeout:int=8):
+    def run(self, search_method:str="dfs", max_iterations:int=1000, requests_timeout:int=5):
         """
         start the crawling process
         args:
             search_method: str, default="bfs", options=["bfs", "dfs"]
             max_iterations: int, default=1000
-            requests_timeout: int, default=8(s)
+            requests_timeout: int, default=5(s)
         """
         # if search_method == "bfs" -> pop(0) -> then the urls_to_visit list will be a queue (FIFO)
         # if ( else for now ) search_method == "dfs" -> pop(-1)-> then the urls_to_visit list will be a stack (LIFO)
@@ -126,17 +121,20 @@ class Crawler:
                 continue
             logging.debug(" - valid response")
 
-            logging.debug(" - Processing")
-            urls, info = self.process_content(url, response) # process the content of the response and extract the urls and info
-            logging.debug(" - Done processing")
-
+            urls = self.get_urls(url, response) # extract the urls from the response
             for item in urls: # add the extracted urls to the urls_to_visit list
                 urls_to_visit.append(item) 
+            visited_urls.add(url) # update the visited urls set
+            logging.debug(" - extracted urls")
 
+            if not self.url_infoExtraction_valid(url):
+                continue
+            logging.debug(" - valid for info extraction")
+
+            info = self.info_parser.get_info(url, response) # extract the info from the response
             self.add_to_index(url, info) # add extracted url and info to the search index and url index
             logging.debug(" - Added to index")
 
-            visited_urls.add(url) # update the visited urls set
 
 
     def url_requeust_valid(self, url:str):
@@ -147,13 +145,7 @@ class Crawler:
             returns:
                 bool
         """
-        # execlude the visited recently constraint from the url constraints
-        # it will be checked later for wether the info should be processed or not
-        # but it has nothing to do with the url validity itself, 
-        # we still need to extract the urls from it and continue crawling
-        rules_to_apply = [rule for rule in self.url_constraints if isinstance(rule, UrlConstraint) and not isinstance(rule, VisitedRecently)]
-        
-        for rule in rules_to_apply:
+        for rule in self.url_constraints:
             if not rule(url):
                 logging.debug(f" - rule {rule} failed")
                 return False
@@ -172,105 +164,71 @@ class Crawler:
                 logging.debug(f" - rule {rule} failed")
                 return False
         return True
-
-    def process_content(self, url:str, resopnse:requests.models.Response):
+    
+    def url_infoExtraction_valid(self, url:str):
         """
-        process the content of the response and extract the urls and info
+        check if the url fulfills info extraction constraints
             args:
                 url: str
-                resopnse: requests.models.Response
             returns:
-                urls: list of urls
-                info: dict of words : counts
+                bool
         """
-        # TODO : handle other content types than html / text
-        raw_html_content = resopnse.text
-        soup = BeautifulSoup(raw_html_content, "html.parser")
+        for rule in self.infoExtraction_constraints:
+            if not rule(url):
+                logging.debug(f" - rule {rule} failed")
+                return False
+        return True
 
-        urls = self.get_urls(url, soup)
-        info = self.get_info(url, soup)
-
-        return urls, info
-
-    def get_urls(self, url:str, html_content:BeautifulSoup):
+    def get_urls(self, url:str, resopnse:requests.models.Response):
         """
         extract the urls from the html content
             args:
                 url: str
-                html_content: BeautifulSoup
+                resopnse: requests.models.Response
             returns:
                 list of urls
         """
-        new_urls = [a["href"] for a in html_content.find_all("a") if a.has_attr("href")]
-        base_url = html_content.find("base")
+        raw_html_content = resopnse.text
+        soup_html_content = BeautifulSoup(raw_html_content, "html.parser")
+        new_urls = [a["href"] for a in soup_html_content.find_all("a") if a.has_attr("href")]
+        base_url = soup_html_content.find("base")
         try:
             base_url = base_url["href"]
         except :
-            logging.warning(f" No base url found for this page : {url}")
+            # logging.warning(f" No base url found for this page : {url}")
             base_url = url
         
         standarized_urls = get_full_urls(base_url, new_urls)
 
         return standarized_urls
 
-    def get_info(self,url:str, html_content: BeautifulSoup):  # TODO more enformations
-        """
-        extract the info from the html content
-        get words and their counts
-            args:
-                url: str
-                html_content: BeautifulSoup
-            returns:
-                dict of words : counts
-        """
-        global IGNORED_WORDS
-
-        # check if the url is visited recently/not visited recently
-        for rule in self.url_constraints:
-            if isinstance(rule, VisitedRecently):
-                if not rule(url):
-                    logging.debug(f" - recently visited, no info processing")
-                    return dict()
-        
-        text = html_content.text
-
-        tokens = [stemmer.stem(word) for word in word_tokenize(text.lower())
-                                if word.isalpha() and word not in self.stop_words]
-        # tokens = re.findall(r'\b\w+\b', text.lower())
-        # tokens = [word for word in tokens if word not in IGNORED_WORDS]
-        
-        words_counts = Counter(tokens)
-        return words_counts # dict of words : counts
-
     def add_to_index(self, url, info):
         """
         add the extracted url and info to the search index
-        add the url to the unique urls index with the current timestamp of this visit
             args:
                 url: str
-                info: dict of words : counts
+                info: dict of info
         """
-        # add an entries to the search index
-        for word, count in info.items():
-            self.search_index.add(word, url, count)
-        # add the url to the unique urls index with the current timestamp
-        self.url_index.add(url, datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+        self.search_index.add(**info)
 
     def validate_constraints(self):
         """
-        check if the constraints are valid and fit them to the crawler
+        check if the constraints are valid and fit them to the crawler if futher configuration is needed
         """
         for constraint in self.url_constraints:
-            if isinstance(constraint, VisitedRecently): # TODO do it better
-                constraint.set_url_index(self.url_index) # initialize the look_up_index
             if isinstance(constraint, SameDomain):
                 constraint.set_domain_urls(self.root_urls) # initialize the root_urls, from whtich the domains will be extracted
-            if not isinstance(constraint, UrlConstraint): # check if all url constraint are of type url_constraint
+            elif not isinstance(constraint, UrlConstraint): 
                 raise TypeError("url_constraints should be a list of objects of type url_constraints")
         
         for constraint in self.response_constraints:
-            if not isinstance(constraint, ResponseConstraint): # check if all response constraint are of type response_constraint
+            if not isinstance(constraint, ResponseConstraint):
                 raise TypeError("response_constraints should be a list of objects of type response_constraints")
-
-
+            
+        for constraint in self.infoExtraction_constraints:
+            if isinstance(constraint, VisitedRecently): 
+                constraint.set_lookup_index(self.search_index) # initialize the lookup_index
+            elif not isinstance(constraint, InfoExtractionConstraint):
+                raise TypeError("infoExtraction_constraints should be a list of objects of type infoExtraction_constraints")
+            
 

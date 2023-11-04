@@ -5,8 +5,11 @@
 #Test Directory
 Test/
 test/
+#Python Compiled Files
 myenv/
 .vscode/
+# data directories
+search_index*/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

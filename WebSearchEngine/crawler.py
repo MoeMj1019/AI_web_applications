@@ -32,51 +32,71 @@ logging.basicConfig(level=logging.INFO)
 # -------------------------------------------------------------------
 # -------------------------- Crawler Class --------------------------
 
+DEFAULT_CONSTRAINTS = {
+    "url_constraints" : [ValidFileExtension(["","html", "htm", "xml","asp","php","jsp","xhtml","shtml","xml","json"])],
+    "response_constraints" : [ValidStatusCode(),ValidContentType()],
+    "infoExtraction_constraints" : [NotVisitedRecently(time_delta=1, time_unit="days")]
+    }
 
 class Crawler:
+    """
+    Crawler class
+    args:
+        root_urls: one or more urls to start crawling from (str)
+        search_index: WebIndex object, default=None
+        info_parser: InfoParser object, default=None
+        url_constraints: list of UrlConstraint objects, default=None
+        response_constraints: list of ResponseConstraint objects, default=None
+        infoExtraction_constraints: list of InfoExtractionConstraint objects, default=None
+    """
     def __init__(self, *root_urls,
                 search_index:WebIndex = None,
                 info_parser:InfoParser = None,
                 url_constraints:list=None, 
                 response_constraints:list=None, 
-                infoExtraction_constraints:list=None):
+                infoExtraction_constraints:list=None,
+                search_index_path:str=None):
         
         self.root_urls = list(root_urls)
 
-        if info_parser:
+        if hasattr(search_index, "add") and callable(search_index.add):
+            self.search_index = search_index
+        elif search_index_path is not None:
+            self.search_index = WebIndex(search_index_path)
+        else:
+            print("No/Not_Valid search index provided, using default")
+            self.search_index = WebIndex()
+
+        if hasattr(info_parser, "get_info") and callable(info_parser.get_info):
             self.info_parser = info_parser
         else:
+            print("No/Not_Valid info parser provided, using default")
             self.info_parser = InfoParser()
-
-        if search_index:
-            self.search_index = search_index
-        else:
-            self.search_index = WebIndex()
 
         try:
             iter(url_constraints)
         except TypeError:
-            print("url_constraints should be iterable")
-            self.url_constraints = []
+            print("url_constraints should be iterable, using default")
+            self.url_constraints = DEFAULT_CONSTRAINTS["url_constraints"]
         else:
             self.url_constraints = list(url_constraints)
         try:
             iter(response_constraints)
         except TypeError:
-            print("response_constraints should be iterable")
-            self.response_constraints = [] 
+            print("response_constraints should be iterable, using default")
+            self.response_constraints = DEFAULT_CONSTRAINTS["response_constraints"]
         else:
             self.response_constraints = list(response_constraints)
         try:
             iter(infoExtraction_constraints)
         except TypeError:
-            print("infoExtraction_constraints should be iterable")
-            self.infoExtraction_constraints = []
+            print("infoExtraction_constraints should be iterable, using default")
+            self.infoExtraction_constraints = DEFAULT_CONSTRAINTS["infoExtraction_constraints"]
         else:
             self.infoExtraction_constraints = list(infoExtraction_constraints)
 
         self.validate_constraints() # make sure the constraints are valid and fit them to the crawler
-
+        
     def run(self, search_method:str="dfs", max_iterations:int=1000, requests_timeout:int=5):
         """
         start the crawling process

@@ -76,11 +76,25 @@
                 color: #666;
                 font-size: 0.9em;
             }
+            header a {
+                text-decoration: none; /* Removes underline */
+                color: inherit; /* Inherits the color from the parent element */
+                font-size: 1.2em; /* Sets initial text size; adjust as needed */
+                transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for transform and color */
+            }
+
+            header a:hover {
+                text-decoration: none; /* Ensures underline does not appear on hover */
+                color: #009688; /* Changes color on hover; choose your preferred color */
+                transform: scale(1.1); /* Enlarges text a bit on hover; adjust scale value as needed */
+            }
         </style>
     </head>
     <body>
         <header>
-            <h1>WebZone Search</h1>
+            <a href="/">
+                <h1>WebZone Search</h1>
+            </a>
             <form action="/search" method="get">
                 <input type="text" name="q" value="{{ query }}" placeholder="Search again..." autofocus />
                 <input type="submit" value="Search" />

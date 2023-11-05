@@ -25,9 +25,17 @@ if __name__ == "__main__":
     index = WebIndex(f"{args.index_path}",
                      stored_content=args.store_content)
     allowed_extensions = ["","html", "htm", "xml","asp","php","jsp","xhtml","shtml","xml","json"]
-    constraints_for_url = [SameDomain(allow_subdomains=True), ValidFileExtension(allowed_extensions)]
-    constraints_for_response = [ValidStatusCode(), ValidContentType()]
-    constraints_for_infoExtraction = [NotVisitedRecently(time_delta=1, time_unit="days")]
+    constraints_for_url = [
+                            SameDomain(allow_subdomains=True),
+                            ValidFileExtension(allowed_extensions)
+                        ]
+    constraints_for_response = [
+                                ValidStatusCode(),
+                                 ValidContentType()
+                            ]
+    constraints_for_infoExtraction = [
+                                    NotVisitedRecently(time_delta=1, time_unit="days")
+                                    ]
 
     root_urls = [
         "https://vm009.rz.uos.de/crawl/index.html",

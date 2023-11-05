@@ -31,4 +31,4 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
-    app.run()
+    app.run(host='0.0.0.0')

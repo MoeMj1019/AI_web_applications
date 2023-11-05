@@ -102,7 +102,7 @@
                 color: #333;
                 text-align: center;
                 margin-top: 20px;
-                margin-bottom: 20px;
+                margin-bottom: 5px;
                 padding: 10px;
                 background-color: #c5d2e0;
                 border-radius: 5px;
@@ -123,7 +123,7 @@
                 <input type="submit" value="Search" />
             </form>
         </header>
-        <h2 id="curr_search_query">Your Search Results for : {{ query }}</h2>
+        <h2 id="curr_search_query">Your Search for : {{ query }}</h2>
         <ul class="result-list">
             {% for link_info in links_info %}
             <li>

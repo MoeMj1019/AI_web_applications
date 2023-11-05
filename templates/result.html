@@ -24,9 +24,13 @@
             header form {
                 width: 100%;
                 max-width: 500px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
             }
             header input[type="text"] {
-                width: 100%;
+                flex: 1;
+                /* width: 100%; */
                 padding: 10px;
                 margin-bottom: 10px;
                 border: 1px solid #ddd;
@@ -34,7 +38,8 @@
                 font-size: 1em;
             }
             header input[type="submit"] {
-                width: 100%;
+                flex: 1;
+                /* width: 100%; */
                 padding: 10px;
                 border: none;
                 border-radius: 5px;
@@ -65,6 +70,11 @@
             }
             .url {
                 color: #006621;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                display: block;
             }
             .highlight {
                 color: #1e222b;
@@ -77,16 +87,16 @@
                 font-size: 0.9em;
             }
             header a {
-                text-decoration: none; /* Removes underline */
-                color: inherit; /* Inherits the color from the parent element */
-                font-size: 1.2em; /* Sets initial text size; adjust as needed */
-                transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for transform and color */
+                text-decoration: none;
+                color: inherit;
+                font-size: 1.2em;
+                transition: transform 0.3s ease, color 0.3s ease;
             }
 
             header a:hover {
-                text-decoration: none; /* Ensures underline does not appear on hover */
-                color: #009688; /* Changes color on hover; choose your preferred color */
-                transform: scale(1.1); /* Enlarges text a bit on hover; adjust scale value as needed */
+                text-decoration: none;
+                color: #009688;
+                transform: scale(1.1);
             }
         </style>
     </head>
@@ -108,7 +118,7 @@
                     <h3>{{ link_info.get('title', link_info['url']) }}</h3>
                 </a>
                 <p class="url">{{ link_info['url'] }}</p>
-                <p class="highlight">{{ link_info.get('highlight','No highlight available' ) }}</p>
+                <p class="highlight">{{ link_info.get('highlight','No highlight available' ) }} ...</p>
                 <p class="description">{{ link_info.get('description', 'No description available.') }}</p>
                 <p class="last-updated">Last updated: {{ link_info.get('time_stamp', 'Not available') }}</p>
             </li>

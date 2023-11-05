@@ -92,11 +92,24 @@
                 font-size: 1.2em;
                 transition: transform 0.3s ease, color 0.3s ease;
             }
-
             header a:hover {
                 text-decoration: none;
                 color: #009688;
                 transform: scale(1.1);
+            }
+            #curr_search_query {
+                font-size: 1.1em;
+                color: #333;
+                text-align: center;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                padding: 10px;
+                background-color: #c5d2e0;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                width: auto;
+                display: inline-block;
+                max-width: 100%;
             }
         </style>
     </head>
@@ -110,7 +123,7 @@
                 <input type="submit" value="Search" />
             </form>
         </header>
-        <h2>Your Search Results for : {{ query }}</h2>
+        <h2 id="curr_search_query">Your Search Results for : {{ query }}</h2>
         <ul class="result-list">
             {% for link_info in links_info %}
             <li>

@@ -132,7 +132,7 @@
                 </a>
                 <p class="url">{{ link_info['url'] }}</p>
                 <p class="highlight">{{ link_info.get('highlight','No highlight available' ) }} ...</p>
-                <p class="description">{{ link_info.get('description', 'No description available.') }}</p>
+                <p class="description">{{ link_info.get('description', '') }}</p>
                 <p class="last-updated">Last updated: {{ link_info.get('time_stamp', 'Not available') }}</p>
             </li>
             {% endfor %}

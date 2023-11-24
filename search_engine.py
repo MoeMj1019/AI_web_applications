@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for , abort
 from WebSearchEngine.index import WebIndex
 from argparse import ArgumentParser
 
@@ -13,7 +13,6 @@ def index():
 @app.route('/search', methods=['GET'])
 def process():
     index = WebIndex(args.index_path)
-    # index = WebIndex("search_index_demo")
     if request.method == 'GET':
         if 'q' in request.args:
             query = request.args['q']
@@ -22,7 +21,12 @@ def process():
         links_info = index.search(query)
         return render_template('result.html', query=query, links_info=links_info)
     
-    
+
+import traceback
+@app.errorhandler(500)
+def internal_error(exception):
+   return "<pre>"+traceback.format_exc()+"</pre>"
+
 def get_args():
     parser = ArgumentParser()
     parser.add_argument("-p", "--index_path", type=str, default="search_index", help="Index folder")

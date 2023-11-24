@@ -20,11 +20,16 @@ def process():
             query = ""
         links_info = index.search(query)
         return render_template('result.html', query=query, links_info=links_info)
+
+    else:
+        return redirect(url_for('index'))
     
 
 import traceback
-@app.errorhandler(500)
+@app.errorhandler(404)
 def internal_error(exception):
+   with open("error.log", "a") as f:
+         f.write(traceback.format_exc()) 
    return "<pre>"+traceback.format_exc()+"</pre>"
 
 def get_args():

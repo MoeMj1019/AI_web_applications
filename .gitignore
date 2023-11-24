@@ -2,6 +2,10 @@
 #json
 *.json
 .json
+#logs
+*.log
+log.txt
+.log
 #Test Directory
 Test/
 test/

@@ -118,7 +118,7 @@
             <a href="{{ url_for('index') }}">
                 <h1>WebZone Search</h1>
             </a>
-            <form action="/search" method="get">
+            <form action="{{ url_for('process')}}" method="get">
                 <input type="text" name="q" value="{{ query }}" placeholder="Search again..." autofocus />
                 <input type="submit" value="Search" />
             </form>

@@ -12,7 +12,8 @@ def index():
 
 @app.route('/search', methods=['GET'])
 def process():
-    index = WebIndex(args.index_path)
+    # index = WebIndex(args.index_path)
+    index = WebIndex("search_index")
     if request.method == 'GET':
         if 'q' in request.args:
             query = request.args['q']
@@ -26,7 +27,7 @@ def process():
     
 
 import traceback
-@app.errorhandler(404)
+@app.errorhandler(500)
 def internal_error(exception):
    with open("error.log", "a") as f:
          f.write(traceback.format_exc()) 

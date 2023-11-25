@@ -63,7 +63,7 @@ class WebIndex:
         if self.__stored_content:
             highlights = [hit.highlights("content") for hit in results]
             # strip html tags used for highlighting TODO : let the text be highlighted in the frontend
-            highlights = [BeautifulSoup(highlight, "html.parser").get_text() for highlight in highlights] 
+            # highlights = [BeautifulSoup(highlight, "html.parser").get_text() for highlight in highlights]
             for i, highlight in enumerate(highlights):
                 processed_results[i]["highlight"] = highlight
         return tuple(processed_results)

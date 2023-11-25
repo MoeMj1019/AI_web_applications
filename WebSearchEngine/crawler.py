@@ -12,14 +12,11 @@ logging.basicConfig(level=logging.INFO)
 # TODO :
 #       - write results of each step ( crawling, info extraction, indexing) seperatly to a file/index
 #               --> way better seperation of concerns/tasks/checks and better debugging
-#       - add default constraints for blausible behaviour without configuration
-#       - more advanced traversing/search methods ?? ( sofar only simple bfs and dfs)
 #       - multi-threading
 #       - handle robots.txt
 #       - deal with query parameters in urls
 #       - decide what to do with other data types (eg get the text from pdf files, description from images, videos, etc)    
 #       --- optemize where needed ---
-#
 #
 #      ------------ maybe ------------
 #       - memory issues when scalling up:

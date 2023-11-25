@@ -1,22 +1,30 @@
-/* index */
-
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
+
 body,
 html {
     height: 100%;
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 15px;
+    background-image: var(--background-url);
+    background-size: cover; 
+    background-repeat: repeat-y;
+    background-position: center;
 }
+
+/* index */
+
 .search-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
     padding: 15px;
-    background: #f8f9fa;
+    /* background: #f8f9fa; */
 }
 .search-box {
     width: 100%;
@@ -55,12 +63,6 @@ html {
 
 /* result */
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background: #f8f9fa;
-}
 header {
     display: flex;
     justify-content: center;

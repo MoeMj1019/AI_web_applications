@@ -5,6 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Search Results - WebZone Search</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+        <style>
+            :root {
+                --background-url: url("{{ url_for("static", filename="images/bg_result.png") }}");
+            }
+        </style>
     </head>
     <body>
         <header>

@@ -21,7 +21,9 @@
                 <input type="submit" value="Search" />
             </form>
         </header>
-        <h2 id="curr_search_query">Your Search for : {{ query }}</h2>
+        <h2 id="curr_search_query">
+            <p>Your Search for : {{ query }}</p>
+        </h2>
         <ul class="result-list">
             {% for link_info in links_info %}
             <li>

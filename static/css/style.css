@@ -108,7 +108,7 @@ header input[type="submit"]:hover {
     padding: 0;
 }
 .result-list li {
-    background: white;
+    background: #E0EDF4;
     margin-bottom: 10px;
     padding: 15px;
     border-radius: 5px;
@@ -152,14 +152,15 @@ header a:hover {
 #curr_search_query {
     font-size: 1.1em;
     color: #333;
-    text-align: center;
+    text-align: left;
     margin-top: 20px;
     margin-bottom: 5px;
     padding: 10px;
-    background-color: #c5d2e0;
+    background-color: #009688;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: auto;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+    /* width: auto; */
+    width: 100%;
     display: inline-block;
     max-width: 100%;
 }

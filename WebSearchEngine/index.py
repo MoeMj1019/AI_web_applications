@@ -34,7 +34,7 @@ class WebIndex:
     
     # MAYBE always return a results with full attributes (fill missing attributes with None/"") ?
     # MAYBE no limit by default ?
-    def search(self, query_str, limit=50): 
+    def search(self, query_str, limit=None): 
         """
         search the index for the query
             args:
@@ -49,7 +49,8 @@ class WebIndex:
             query = QueryParser("content", self.index.schema).parse(query_str)
             results = searcher.search(query, limit=limit)
             processed_results = self.process_search_results(results)
-            return processed_results
+
+        return processed_results
     
     def process_search_results(self, results:Results):
         """
@@ -61,7 +62,7 @@ class WebIndex:
         """
         processed_results = [dict(hit) for hit in results]
         if self.__stored_content:
-            highlights = [hit.highlights("content") for hit in results]
+            highlights = [hit.highlights("content") for hit in results] # TODO : parallelize this / make it faster
             # strip html tags used for highlighting TODO : let the text be highlighted in the frontend
             # highlights = [BeautifulSoup(highlight, "html.parser").get_text() for highlight in highlights]
             for i, highlight in enumerate(highlights):

@@ -19,7 +19,7 @@ def process():
             query = request.args['q']
         else:
             query = ""
-        links_info = index.search(query)
+        links_info = index.search(query,limit=50)
         return render_template('result.html', query=query, links_info=links_info)
 
     else:

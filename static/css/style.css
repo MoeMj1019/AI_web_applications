@@ -9,7 +9,7 @@ html {
     height: 100%;
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 15px;
+    padding: 30px;
     background-image: var(--background-url);
     background-size: cover; 
     background-repeat: repeat-y;
@@ -17,6 +17,39 @@ html {
 }
 
 /* index */
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.search-bar input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    padding-right: 30px; /* Add right padding to avoid text under the clear button */
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.search-bar .clear-btn {
+    position: absolute;
+    right: 10px; /* Position to the right inside the search bar */
+    top: 40%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: #333;
+    visibility: hidden; /* Start with button hidden */
+}
+
+.search-bar .clear-btn:hover {
+    color: #666;
+}
 
 .search-container {
     display: flex;
@@ -39,6 +72,7 @@ html {
 }
 .search-box input[type="text"] {
     width: 100%;
+    /* width: calc(100% - 40px); */
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
@@ -151,7 +185,7 @@ header a:hover {
 }
 #curr_search_query {
     font-size: 1.1em;
-    color: #333;
+    color: rgba(255, 255, 255, 0.8);
     text-align: left;
     margin-top: 20px;
     margin-bottom: 5px;

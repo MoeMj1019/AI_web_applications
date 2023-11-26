@@ -139,8 +139,9 @@ class Crawler:
             logging.debug(" - valid response")
 
             urls = self.get_urls(url, response) # extract the urls from the response
-            for item in urls: # add the extracted urls to the urls_to_visit list
-                urls_to_visit.append(item) 
+            urls_to_visit.extend(urls)
+            # for item in urls: # add the extracted urls to the urls_to_visit list
+            #     urls_to_visit.append(item) 
             visited_urls.add(url) # update the visited urls set
             logging.debug(" - extracted urls")
 

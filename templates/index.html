@@ -6,18 +6,39 @@
         <title>WebZone Search</title>
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
         <style>
             :root {
                 --background-url: url("{{ url_for("static", filename="images/bg_index.png") }}");
             }
         </style>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     </head>
     <body>
         <div class="search-container">
             <div class="search-box">
                 <h1>WebZone</h1>
                 <form action="{{ url_for('process')}}" method="get">
-                    <input type="text" name="q" placeholder="What are you looking for?" autofocus />
+                    <div class="search-bar">
+                        <input
+                            type="text"
+                            name="q"
+                            id="searchInput"
+                            placeholder="What are you looking for?"
+                            autofocus
+                            oninput="showClearButton()"
+                        />
+                        <button
+                            type="button"
+                            id="clearButton"
+                            onclick="clearSearch()"
+                            class="clear-btn"
+                            style="visibility: hidden"
+                        >
+                            &#x2715;
+                        </button>
+                    </div>
+                    <!-- <input type="text" name="q" placeholder="What are you looking for?" autofocus /> -->
                     <input type="submit" value="Search" />
                 </form>
             </div>

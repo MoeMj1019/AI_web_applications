@@ -44,6 +44,7 @@
         <h2 id="curr_search_query">
             <p>Your Search for : {{ query }}</p>
         </h2>
+        <p id="corrected_query">{{ corrected_query_str | safe }}</p>
         <ul class="result-list">
             {% for link_info in links_info %}
             <li>

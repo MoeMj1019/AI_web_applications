@@ -6,9 +6,11 @@
 
 - [x] Search query
     - [x] better results/ordering
-        - [x] ORed terms after ANDed terms
+        <!-- - [x] ORed terms after ANDed terms -->
         - [x] PageRank  
-    - [x] spell check
+    <!-- - [x] spell check -->
+        - [x] make it faster
+        - [x] add links to the results
 
 - [x] crawler
     - [x] IDDFS search ? or something else

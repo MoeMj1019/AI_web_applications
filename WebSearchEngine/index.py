@@ -2,10 +2,11 @@ import os
 from whoosh.index import create_in , open_dir , exists_in , EmptyIndexError
 from whoosh.fields import Schema, TEXT, ID , DATETIME
 from whoosh.analysis import StemmingAnalyzer
-from whoosh.qparser import QueryParser
-from whoosh.qparser import QueryParser, OperatorsPlugin, OrGroup
-from whoosh import qparser
 from whoosh.searching import Results
+from whoosh.qparser import QueryParser, OperatorsPlugin
+from whoosh import highlight
+from whoosh import spelling
+from whoosh import qparser
 from bs4 import BeautifulSoup
 
 class WebIndex:
@@ -15,10 +16,28 @@ class WebIndex:
                             title=TEXT(stored=True),
                             description=TEXT(stored=True),
                             time_stamp=DATETIME(stored=True),
-                            content=TEXT(analyzer=StemmingAnalyzer(), stored=stored_content))
+                            content=TEXT(analyzer=StemmingAnalyzer(), spelling=True, stored=stored_content))
         self.index = self.__initialize_index()
         self.__stored_content = self.index.schema["content"].stored
-    
+
+        self.set_parser()
+        # self.correctors = {"content": spelling.Corrector()} 
+
+    def set_parser(self, or_and_scaler=0.9):
+        """
+        set the parser
+            args:
+                or_and_scaler: float (between 0 and 1)
+        """
+        OR_grouping = qparser.OrGroup.factory(or_and_scaler) 
+        parser = QueryParser("content", self.index.schema, group=OR_grouping) 
+        parser.remove_plugin_class(qparser.FieldsPlugin)
+        parser.remove_plugin_class(qparser.WildcardPlugin)
+        parser.add_plugin(qparser.FuzzyTermPlugin())
+        parser.replace_plugin(OperatorsPlugin(And="AND", Or="OR", AndMaybe="&", Not="NOT"))
+
+        self.parser = parser
+
     def add(self, **kwargs): 
         """
         add a new entry to the index
@@ -44,20 +63,27 @@ class WebIndex:
                 limit: int
             returns:
                 tuple of dicts of the results
-        """                                
+        """                     
+        query = self.parser.parse(query_str)   
+        hf = highlight.HtmlFormatter()            
         processed_results = None
+        corrected_str = None
+        corrected_query = None
         # with self.__get_searcher() as searcher:
         with self.index.searcher() as searcher:
-            og = qparser.OrGroup.factory(0.9)
-            parser = QueryParser("content", self.index.schema, group=og)
-            #parser.replace_plugin(OperatorsPlugin(And="AND", Or="OR", AndMaybe="&", Not="NOT"))
-            query = parser.parse(query_str)
+            # query = QueryParser("content", self.index.schema).parse(query_str)
+            # corrected = searcher.correct_query(query, qstring=query_str)
+            correction = searcher.correct_query(query, qstring=query_str)
 
-
+            if correction.query != query:
+                # print("Did you mean:", corrected.string)
+                corrected_str = correction.format_string(hf)
+                # corrected_str = correction.string
+                corrected_query = correction.query
             results = searcher.search(query, limit=limit)
             processed_results = self.process_search_results(results)
 
-        return processed_results
+        return processed_results , corrected_str
     
     def process_search_results(self, results:Results):
         """

@@ -69,6 +69,7 @@ class WebIndex:
         processed_results = None
         corrected_str = None
         corrected_query = None
+        corrected_str_formated = None
         # with self.__get_searcher() as searcher:
         with self.index.searcher() as searcher:
             # query = QueryParser("content", self.index.schema).parse(query_str)
@@ -77,13 +78,13 @@ class WebIndex:
 
             if correction.query != query:
                 # print("Did you mean:", corrected.string)
-                corrected_str = correction.format_string(hf)
-                # corrected_str = correction.string
+                corrected_str_formated = correction.format_string(hf)
+                corrected_str = correction.string
                 corrected_query = correction.query
             results = searcher.search(query, limit=limit)
             processed_results = self.process_search_results(results)
 
-        return processed_results , corrected_str
+        return processed_results , corrected_str, corrected_str_formated
     
     def process_search_results(self, results:Results):
         """

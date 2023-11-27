@@ -44,7 +44,12 @@
         <h2 id="curr_search_query">
             <p>Your Search for : {{ query }}</p>
         </h2>
-        <p id="corrected_query">{{ corrected_query_str | safe }}</p>
+        <p id="corrected_query">
+            {% if corrected_query_formated %}
+                Did you mean: <a href="{{ url_for('process', q=corrected_query) }}">{{ corrected_query_formated | safe }}</a>
+            {% endif %}
+        </p>
+        
         <ul class="result-list">
             {% for link_info in links_info %}
             <li>

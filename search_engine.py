@@ -19,12 +19,10 @@ def process():
             query = request.args['q']
         else:
             query = ""
-        links_info , corrected_query= index.search(query,limit=50)
-        corrected_query_str = ""
-        if corrected_query:
-            corrected_query_str = f"did you mean: {corrected_query}"
 
-        return render_template('result.html', query=query, links_info=links_info, corrected_query_str=corrected_query_str)
+        links_info , corrected_query, corrected_query_formated = index.search(query,limit=50)
+
+        return render_template('result.html', query=query, links_info=links_info, corrected_query=corrected_query ,corrected_query_formated=corrected_query_formated)
 
     else:
         return redirect(url_for('index'))

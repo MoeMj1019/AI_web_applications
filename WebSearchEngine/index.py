@@ -3,6 +3,8 @@ from whoosh.index import create_in , open_dir , exists_in , EmptyIndexError
 from whoosh.fields import Schema, TEXT, ID , DATETIME
 from whoosh.analysis import StemmingAnalyzer
 from whoosh.qparser import QueryParser
+from whoosh.qparser import QueryParser, OperatorsPlugin, OrGroup
+from whoosh import qparser
 from whoosh.searching import Results
 from bs4 import BeautifulSoup
 
@@ -46,7 +48,12 @@ class WebIndex:
         processed_results = None
         # with self.__get_searcher() as searcher:
         with self.index.searcher() as searcher:
-            query = QueryParser("content", self.index.schema).parse(query_str)
+            og = qparser.OrGroup.factory(0.9)
+            parser = QueryParser("content", self.index.schema, group=og)
+            #parser.replace_plugin(OperatorsPlugin(And="AND", Or="OR", AndMaybe="&", Not="NOT"))
+            query = parser.parse(query_str)
+
+
             results = searcher.search(query, limit=limit)
             processed_results = self.process_search_results(results)
 

@@ -33,7 +33,7 @@ class WebIndex:
         parser = QueryParser("content", self.index.schema, group=OR_grouping) 
         parser.remove_plugin_class(qparser.FieldsPlugin)
         parser.remove_plugin_class(qparser.WildcardPlugin)
-        parser.add_plugin(qparser.FuzzyTermPlugin())
+        # parser.add_plugin(qparser.FuzzyTermPlugin())
         parser.replace_plugin(OperatorsPlugin(And="AND", Or="OR", AndMaybe="&", Not="NOT"))
 
         self.parser = parser

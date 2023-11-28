@@ -45,11 +45,11 @@
             <p>Your Search for : {{ query }}</p>
         </h2>
         <p id="corrected_query">
-            {% if corrected_query_formated %}
-                Did you mean: <a href="{{ url_for('process', q=corrected_query) }}">{{ corrected_query_formated | safe }}</a>
+            {% if corrected_query_formated %} Did you mean:
+            <a href="{{ url_for('process', q=corrected_query) }}">{{ corrected_query_formated | safe }}</a>
             {% endif %}
         </p>
-        
+
         <ul class="result-list">
             {% for link_info in links_info %}
             <li>
@@ -57,9 +57,11 @@
                     <h3>{{ link_info.get('title', link_info['url']) }}</h3>
                 </a>
                 <p class="url">{{ link_info['url'] }}</p>
-                <p class="highlight">{{ link_info.get('highlight','No highlight available') | safe }} ...</p>
+                <p class="highlight">{{ link_info.get('highlight','') | safe }} ...</p>
                 <p class="description">{{ link_info.get('description', '') }}</p>
-                <p class="last-updated">Last updated: {{ link_info.get('time_stamp', 'Not available') }}</p>
+                <p class="last-updated">
+                    Last updated: {{ link_info.get('time_stamp', 'Last time stamp Not available') }}
+                </p>
             </li>
             {% endfor %}
         </ul>

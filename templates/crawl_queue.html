@@ -16,20 +16,23 @@
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     </head>
     <body>
-        <div class="search-container">
+        <div class="crawl_queue-container">
             <div class="search-box">
-                <header class="highlight-main-text">
-                    <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WebZone" /> -->
-                    <h1>WebZone</h1>
+                <header class="seach-engine-name">
+                    <p class="highlight-title-text">your</p>
+                    <a href="{{ url_for('start') }}">
+                        <h1>WebZone</h1>
+                    </a>
+                    <p class="highlight-title-text">crawler</p>
                 </header>
-                <form action="{{ url_for('search')}}" method="get">
+                <form action="{{ url_for('add_to_crawler')}}" method="post">
                     <div class="search-bar">
                         <input
                             class="bar-input"
                             type="text"
-                            name="q"
-                            id="searchInput"
-                            placeholder="What are you looking for?"
+                            name="crawlInput"
+                            id="crawlInput"
+                            placeholder="Enter a URL or Topics"
                             autofocus
                             oninput="showClearButton()"
                         />
@@ -43,19 +46,11 @@
                             &#x2715;
                         </button>
                     </div>
-                    <!-- <input type="text" name="q" placeholder="What are you looking for?" autofocus /> -->
-                    <input type="submit" value="Search" />
+                    <input type="submit" value="Add to Queue" />
                 </form>
-                <div id="crawl-queue-link">
-                    <a href="{{ url_for('crawl_queue') }}">
-                        <h1 class="highlight-main-text">
-                            <p style="color: #e67f7f">Make It Your Own Web Corner</p>
-                        </h1>
-                    </a>
-                </div>
+                <label for="crawlInput">your input will be considered for the next Crawler run</label>
             </div>
         </div>
-
         <footer>
             <div class="footer-container">
                 <div class="footer-links">

@@ -43,10 +43,14 @@ def add_to_crawler():
         logger.info('Adding %s to crawler', processed_input)
         logger.info('Writing %s to crawler queue', processed_input)
         logger_crwler.info(url)
-        return redirect(url_for('start'))
+        return redirect(url_for('crawl_queue'))
     else:
-        logger.warning('Redirecting to stars route')
+        logger.warning('Redirecting to start route')
         return redirect(url_for('start'))
+    
+@app.route('/personalize_search_space')
+def crawl_queue():
+    return render_template('crawl_queue.html')
 
 @app.route('/')
 def start():

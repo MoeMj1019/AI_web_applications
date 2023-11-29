@@ -1,10 +1,16 @@
 function clearSearch() {
-    document.getElementById("searchInput").value = "";
+    var inputs = document.getElementsByClassName("bar-input");
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].value = "";
+    }
     document.getElementById("clearButton").style.visibility = "hidden"; 
 }
 
 function showClearButton() {
-    if (document.getElementById("searchInput").value.length > 0) {
+    var inputs = document.getElementsByClassName("bar-input");
+    var anyInputHasValue = Array.from(inputs).some(input => input.value.length > 0);
+
+    if (anyInputHasValue) {
         document.getElementById("clearButton").style.visibility = "visible";
     } else {
         document.getElementById("clearButton").style.visibility = "hidden";

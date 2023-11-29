@@ -19,21 +19,32 @@
     <body>
         <header>
             <a href="{{ url_for('start') }}">
-                <h1>WebZone Search</h1>
+                <h1 class="highlight-main-text">WebZone Search</h1>
             </a>
         </header>
-        <h2>Authors:</h2>
-        <p>Mohamad Aljammal <a href="maljammal@uni-osnabrueck.de"> maljammal@uni-osnabrueck.de</a></p>
-        <p>Pit Sinning <a href="psinning@uni-osnabrueck.de ">psinning@uni-osnabrueck.de </a></p>
-        <p>Periklis Maskanakis <a href="pmaskanakis@uni-osnabrueck.de "> pmaskanakis@uni-osnabrueck.de </a></p>
-
+        <div class="contact-container">
+            <h2>Authors:</h2>
+            <p>
+                Mohamad Aljammal
+                <a href="mailto:maljammal@uni-osnabrueck.de" target="_blank"> maljammal@uni-osnabrueck.de</a>
+            </p>
+            <p>
+                Pit Sinning <a href="mailto:psinning@uni-osnabrueck.de " target="_blank">psinning@uni-osnabrueck.de </a>
+            </p>
+            <p>
+                Periklis Maskanakis
+                <a href="mailto:pmaskanakis@uni-osnabrueck.de " target="_blank"> pmaskanakis@uni-osnabrueck.de </a>
+            </p>
+        </div>
         <footer>
             <div class="footer-container">
                 <div class="footer-links">
                     <a href="{{ url_for('start') }}">Home</a>
                     <a href="{{ url_for('search') }}">Search</a>
+                    <a href="{{ url_for('crawl_queue') }}">Crawl-Queue</a>
                     <a href="{{ url_for('about') }}">About</a>
                     <a href="{{ url_for('contact') }}">Contact</a>
+                    <a href="https://github.com/MockaWolke/search_engine_project" target="_blank">Documentation</a>
                 </div>
             </div>
         </footer>

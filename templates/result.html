@@ -20,61 +20,85 @@
         </script>
     </head>
     <body>
-        <header>
-            <a href="{{ url_for('start') }}">
-                <h1>WebZone Search</h1>
-            </a>
-            <form action="{{ url_for('search')}}" method="get">
-                <div id="search_bar_result" class="search-bar">
-                    <input
-                        type="text"
-                        name="q"
-                        id="searchInput"
-                        placeholder="What are you looking for?"
-                        autofocus
-                        oninput="showClearButton()"
-                    />
-                    <button
-                        type="button"
-                        id="clearButton"
-                        onclick="clearSearch()"
-                        class="clear-btn"
-                        style="visibility: hidden"
-                    >
-                        &#x2715;
-                    </button>
-                </div>
-                <input type="submit" value="Search" />
-            </form>
-        </header>
-        <h2 id="curr_search_query">
-            <p>Your Search for : {{ query }}</p>
-        </h2>
-        <p id="corrected_query">
-            {% if corrected_query_formated %} Did you mean:
-            <a href="{{ url_for('search', q=corrected_query) }}">{{ corrected_query_formated | safe }}</a>
-            {% endif %}
-        </p>
-
-        <ul class="result-list">
-            {% for link_info in links_info %}
-            <li>
-                <a href="{{ link_info['url'] }}">
-                    <h3>{{ link_info.get('title', link_info['url']) }}</h3>
+        <div>
+            <header>
+                <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WebZone" /> -->
+                <a href="{{ url_for('start') }}">
+                    <h1 class="highlight-main-text">WebZone Search</h1>
                 </a>
-                <p class="url">{{ link_info['url'] }}</p>
-                <p class="highlight">{{ link_info.get('highlight','') | safe }} ...</p>
-                <p class="description">{{ link_info.get('description', '') }}</p>
-                <p class="last-updated">
-                    Last updated: {{ link_info.get('time_stamp', 'Last time stamp Not available') }}
-                </p>
-            </li>
-            {% endfor %}
-        </ul>
-        <input type="hidden" id="currentPage" value="1" />
-        {% if links_info %}
-        <input type="hidden" name="q" id="hiddenSearchInput" value="{{ query }}" />
-        <button id="loadMoreButton" class="load-more-button">Load More</button>
-        {% endif %}
+                <form action="{{ url_for('search')}}" method="get">
+                    <div id="search_bar_result" class="search-bar">
+                        <input
+                            class="bar-input"
+                            type="text"
+                            name="q"
+                            id="searchInput"
+                            placeholder="What are you looking for?"
+                            autofocus
+                            oninput="showClearButton()"
+                        />
+                        <button
+                            type="button"
+                            id="clearButton"
+                            onclick="clearSearch()"
+                            class="clear-btn"
+                            style="visibility: hidden"
+                        >
+                            &#x2715;
+                        </button>
+                    </div>
+                    <input type="submit" value="Search" />
+                </form>
+            </header>
+        </div>
+
+        <div>
+            <h2 id="curr_search_query">
+                <p>Your Search for : {{ query }}</p>
+            </h2>
+
+            <p id="corrected_query">
+                {% if corrected_query_formated %} Did you mean:
+                <a href="{{ url_for('search', q=corrected_query) }}">{{ corrected_query_formated | safe }}</a>
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="resuts-box">
+            <ul class="result-list">
+                {% for link_info in links_info %}
+                <li>
+                    <a href="{{ link_info['url'] }}">
+                        <h3>{{ link_info.get('title', link_info['url']) }}</h3>
+                    </a>
+                    <p class="url">{{ link_info['url'] }}</p>
+                    <p class="highlight">{{ link_info.get('highlight','') | safe }} ...</p>
+                    <p class="description">{{ link_info.get('description', '') }}</p>
+                    <p class="last-updated">
+                        Last updated: {{ link_info.get('time_stamp', 'Last time stamp Not available') }}
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="load-more">
+            <input type="hidden" id="currentPage" value="1" />
+            {% if links_info %}
+            <input type="hidden" name="q" id="hiddenSearchInput" value="{{ query }}" />
+            <button id="loadMoreButton" class="load-more-button">Load More</button>
+            {% endif %}
+        </div>
+        <footer>
+            <div class="footer-container">
+                <div class="footer-links">
+                    <a href="{{ url_for('start') }}">Home</a>
+                    <a href="{{ url_for('search') }}">Search</a>
+                    <a href="{{ url_for('crawl_queue') }}">Crawl-Queue</a>
+                    <a href="{{ url_for('about') }}">About</a>
+                    <a href="{{ url_for('contact') }}">Contact</a>
+                    <a href="https://github.com/MockaWolke/search_engine_project" target="_blank">Documentation</a>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>

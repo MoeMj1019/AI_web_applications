@@ -21,10 +21,10 @@ html {
 }
 
 footer {
-    position: absolute;
-    width: 20%;
+    position: fixed;
+    width: 25%;
     bottom: 0;
-    left: 0;
+    right: 0;
     background-color: rgb(164, 217, 235);
     color: black;
     padding: 10px;
@@ -37,13 +37,15 @@ footer {
 }
 
 .footer-container {
-    max-width: 500px;
+    width: fit-content;
     margin: auto;
 }
 
 .footer-links {
     display: flex;
+    flex-direction: row;
     gap: 10px;
+    align-items: center;
 }
 
 .footer-links a {
@@ -55,6 +57,44 @@ footer {
 
 .footer-links a:hover {
     color: #007bff;
+}
+
+.contact-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 80%; 
+}
+
+.contact-container p {
+    margin: 10px 0;
+}
+
+.highlight-title-text{
+    color: #e67f7f;
+    font-size: 1.2em; 
+    font-weight: bold;
+}
+
+.highlight-main-text{
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.highlight-main-text:hover {
+    text-decoration: none;
+    color: #009688;
+    transform: scale(1.1);
+}
+
+header.highlight-main-text h1:hover {
+    text-decoration: none;
+    color: #009688;
+    transform: scale(1.1);
 }
 
 /* #################### start #################### */
@@ -147,46 +187,35 @@ header.seach-engine-name h1:hover {
     background-color: #0056b3;
 }
 
-.crawl-input {
-    position: absolute;
-    top: 50px;
-    left: 50px;
+#crawl-queue-link {
+    margin-top: 20px; /* Adjust as needed */
+    margin-bottom: 20px; /* Adjust as needed */
+    text-align: center;
+}
+
+#crawl-queue-link a {
+    text-decoration: none;
+}
+
+/* #################### crawl_queue #################### */
+
+.crawl_queue-container {
     display: flex;
-    flex-direction: column;
-    background-color: #C9E1EB;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 15px;
+    /* background: #f8f9fa; */
 }
 
-.crawl-input label {
-    margin-bottom: 5px;
-}
-
-.crawl-input input {
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+.crawl_queue-container label {
+    display: block;
     width: 100%;
+    font-size: 1.2em;
+    color: red;
+    margin-bottom: 20px;
+    text-align: center;
 }
-
-.crawl-input input[type="submit"] {
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    width: 100%;
-
-}
-
-.crawl-input input[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-
 
 /* #################### result #################### */
 
@@ -272,16 +301,12 @@ header a {
     font-size: 1.2em;
     transition: transform 0.3s ease, color 0.3s ease;
 }
-header a:hover {
-    text-decoration: none;
-    color: #009688;
-    transform: scale(1.1);
-}
+
 #curr_search_query {
     font-size: 1.1em;
     color: rgba(255, 255, 255, 0.8);
     text-align: left;
-    margin-top: 20px;
+    margin-top: 1px;
     margin-bottom: 5px;
     padding: 10px;
     background-color: #009688;

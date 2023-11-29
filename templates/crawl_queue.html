@@ -19,11 +19,13 @@
         <div class="crawl_queue-container">
             <div class="search-box">
                 <header class="seach-engine-name">
-                    <p class="highlight-title-text">your</p>
-                    <a href="{{ url_for('start') }}">
-                        <h1>WebZone</h1>
-                    </a>
-                    <p class="highlight-title-text">crawler</p>
+                    <div id="your-webzone-crawler">
+                        <p class="highlight-title-text">your</p>
+                        <a href="{{ url_for('start') }}">
+                            <h1 class="highlight-main-text">WebZone</h1>
+                        </a>
+                        <p class="highlight-title-text">crawler</p>
+                    </div>
                 </header>
                 <form action="{{ url_for('add_to_crawler')}}" method="post">
                     <div class="search-bar">

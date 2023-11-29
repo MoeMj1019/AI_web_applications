@@ -217,6 +217,20 @@ header.seach-engine-name h1:hover {
     text-align: center;
 }
 
+#your-webzone-crawler {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+#your-webzone-crawler p,
+#your-webzone-crawler h1 {
+    display: inline;
+    margin-left: 2px; /* Adjust as needed */
+    margin-right: 2px; /* Adjust as needed */
+}
+
 /* #################### result #################### */
 
 

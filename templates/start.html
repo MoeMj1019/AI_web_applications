@@ -9,7 +9,7 @@
         <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
         <style>
             :root {
-                --background-url: url("{{ url_for("static", filename="images/bg_index.png") }}");
+                --background-url: url("{{ url_for("static", filename="images/bg_start.png") }}");
             }
         </style>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
@@ -18,7 +18,7 @@
         <div class="search-container">
             <div class="search-box">
                 <h1>WebZone</h1>
-                <form action="{{ url_for('process')}}" method="get">
+                <form action="{{ url_for('search')}}" method="get">
                     <div class="search-bar">
                         <input
                             type="text"
@@ -43,5 +43,35 @@
                 </form>
             </div>
         </div>
+        <div class="content">
+            <!-- Your search results or other content here -->
+            <div class="crawl-input">
+                <label for="crawlInput">Make it your own corner on the vast web</label>
+                <form action="{{ url_for('add_to_crawler')}}" method="post">
+                    <input type="text" id="crawlInput" name="crawlInput" placeholder="Enter a URL or Topics" />
+                    <input type="submit" value="Add to Queue" />
+                    <!-- <button type="button" onclick="add_to_crawl()">Add to Queue</button> -->
+                </form>
+                <label for="crawlInput">the input will be considered for the next Crawler run</label>
+
+                <!-- <input
+                    type="text"
+                    id="crawlInput"
+                    name="crawlInput"
+                    placeholder="URL/Topics to consider for next Crawler run"
+                />
+                <button type="button" onclick="add_to_crawl()">Add to Queue</button> -->
+            </div>
+        </div>
+        <footer>
+            <div class="footer-container">
+                <div class="footer-links">
+                    <a href="{{ url_for('start') }}">Home</a>
+                    <a href="{{ url_for('search') }}">Search</a>
+                    <a href="{{ url_for('about') }}">About</a>
+                    <a href="{{ url_for('contact') }}">Contact</a>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>

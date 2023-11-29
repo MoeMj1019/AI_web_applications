@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>WebZone Search</title>
+
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+
+        <style>
+            :root {
+                --background-url: url("{{ url_for("static", filename="images/bg_index.png") }}");
+            }
+        </style>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </head>
+    <body>
+        <header>
+            <a href="{{ url_for('start') }}">
+                <h1>WebZone Search</h1>
+            </a>
+        </header>
+        <h2>Authors:</h2>
+        <p>Mohamad Aljammal <a href="maljammal@uni-osnabrueck.de"> maljammal@uni-osnabrueck.de</a></p>
+        <p>Pit Sinning <a href="psinning@uni-osnabrueck.de ">psinning@uni-osnabrueck.de </a></p>
+        <p>Periklis Maskanakis <a href="pmaskanakis@uni-osnabrueck.de "> pmaskanakis@uni-osnabrueck.de </a></p>
+        <footer>
+            <div class="footer-container">
+                <div class="footer-links">
+                    <a href="{{ url_for('start') }}">Home</a>
+                    <a href="{{ url_for('search') }}">Search</a>
+                    <a href="{{ url_for('about') }}">About</a>
+                    <a href="{{ url_for('contact') }}">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

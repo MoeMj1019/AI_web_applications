@@ -22,3 +22,7 @@ def convert_time_units(time_delta, from_unit, to_unit):
 
 def normalize_time_units(time_delta, time_unit):
     return convert_time_units(time_delta, time_unit, "seconds")
+
+
+def check_added_content_crawler(input):
+    return input

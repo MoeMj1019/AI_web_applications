@@ -6,8 +6,10 @@ from whoosh.searching import Results
 from whoosh.qparser import QueryParser, OperatorsPlugin
 from whoosh import highlight
 from whoosh import spelling
+from whoosh import scoring
 from whoosh import qparser
 from bs4 import BeautifulSoup
+
 
 class WebIndex:
     def __init__(self, index_dir="search_index", stored_content=False):
@@ -21,6 +23,7 @@ class WebIndex:
         self.__stored_content = self.index.schema["content"].stored
 
         self.set_parser()
+        self.__correction_cache = dict()
         # self.correctors = {"content": spelling.Corrector()} 
 
     def set_parser(self, or_and_scaler=0.9):
@@ -55,7 +58,7 @@ class WebIndex:
     
     # MAYBE always return a results with full attributes (fill missing attributes with None/"") ?
     # MAYBE no limit by default ?
-    def search(self, query_str, limit=None): 
+    def search(self, query_str, page_num=1, page_limit=50, scoring_method:scoring = scoring.BM25F()): 
         """
         search the index for the query
             args:
@@ -67,22 +70,27 @@ class WebIndex:
         query = self.parser.parse(query_str)   
         hf = highlight.HtmlFormatter()            
         processed_results = None
-        corrected_str = None
-        corrected_query = None
-        corrected_str_formated = None
-        # with self.__get_searcher() as searcher:
-        with self.index.searcher() as searcher:
-            # query = QueryParser("content", self.index.schema).parse(query_str)
-            # corrected = searcher.correct_query(query, qstring=query_str)
-            correction = searcher.correct_query(query, qstring=query_str)
+        corrected_str = ""
+        corrected_query = ""
+        corrected_str_formated = ""
+        with self.index.searcher(weighting=scoring_method) as searcher:
+            # results = searcher.search(query, limit=limit)
+            results = searcher.search_page(query, page_num, pagelen=page_limit)
+            processed_results = self.process_search_results(results)
+
+            # simple correction cache check
+            if query_str in self.__correction_cache:
+                correction = self.__correction_cache[query_str]
+            else:
+                correction = searcher.correct_query(query, qstring=query_str)
+                self.__correction_cache[query_str] = correction
+            # correction = searcher.correct_query(query, qstring=query_str)
 
             if correction.query != query:
                 # print("Did you mean:", corrected.string)
                 corrected_str_formated = correction.format_string(hf)
                 corrected_str = correction.string
                 corrected_query = correction.query
-            results = searcher.search(query, limit=limit)
-            processed_results = self.process_search_results(results)
 
         return processed_results , corrected_str, corrected_str_formated
     
@@ -94,13 +102,15 @@ class WebIndex:
             returns:
                 tuple of dicts of the results
         """
-        processed_results = [dict(hit) for hit in results]
-        if self.__stored_content:
-            highlights = [hit.highlights("content") for hit in results] # TODO : parallelize this / make it faster
-            # strip html tags used for highlighting TODO : let the text be highlighted in the frontend
-            # highlights = [BeautifulSoup(highlight, "html.parser").get_text() for highlight in highlights]
-            for i, highlight in enumerate(highlights):
-                processed_results[i]["highlight"] = highlight
+        # TODO : let the text be highlighted in the frontend
+        # TODO : parallelize this / make it faster
+        processed_results = []
+        for hit in results:
+            hit_dict = dict(hit)
+            if self.__stored_content:
+                highlight = hit.highlights("content")
+                hit_dict["highlight"] = highlight
+            processed_results.append(hit_dict)
         return tuple(processed_results)
     
     def entry_has_ID(self, **kwargs):

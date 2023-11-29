@@ -5,20 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Search Results - WebZone Search</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+
         <style>
             :root {
                 --background-url: url("{{ url_for("static", filename="images/bg_result.png") }}");
             }
         </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     </head>
     <body>
         <header>
-            <a href="{{ url_for('index') }}">
+            <a href="{{ url_for('start') }}">
                 <h1>WebZone Search</h1>
             </a>
-            <form action="{{ url_for('process')}}" method="get">
-                <div class="search-bar">
+            <form action="{{ url_for('search')}}" method="get">
+                <div id="search_bar_result" class="search-bar">
                     <input
                         type="text"
                         name="q"
@@ -37,7 +40,6 @@
                         &#x2715;
                     </button>
                 </div>
-                <!-- <input type="text" name="q" placeholder="What are you looking for?" autofocus /> -->
                 <input type="submit" value="Search" />
             </form>
         </header>
@@ -46,7 +48,7 @@
         </h2>
         <p id="corrected_query">
             {% if corrected_query_formated %} Did you mean:
-            <a href="{{ url_for('process', q=corrected_query) }}">{{ corrected_query_formated | safe }}</a>
+            <a href="{{ url_for('search', q=corrected_query) }}">{{ corrected_query_formated | safe }}</a>
             {% endif %}
         </p>
 
@@ -65,5 +67,10 @@
             </li>
             {% endfor %}
         </ul>
+        <input type="hidden" id="currentPage" value="1" />
+        {% if links_info %}
+        <input type="hidden" name="q" id="hiddenSearchInput" value="{{ query }}" />
+        <button id="loadMoreButton" class="load-more-button">Load More</button>
+        {% endif %}
     </body>
 </html>

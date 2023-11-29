@@ -9,11 +9,15 @@
 
         <style>
             :root {
-                --background-url: url("{{ url_for("static", filename="images/bg_result.png") }}");
+                --background-url: url("{{ url_for('static', filename="images/bg_result.png") }}");
+                --search-url: "{{ url_for('search')}}";
             }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <script>
+            var searchUrl = "{{ url_for('search') }}";
+        </script>
     </head>
     <body>
         <header>

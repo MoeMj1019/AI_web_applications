@@ -1,6 +1,6 @@
 function clearSearch() {
     document.getElementById("searchInput").value = "";
-    document.getElementById("clearButton").style.visibility = "hidden"; // Hide button when input is cleared
+    document.getElementById("clearButton").style.visibility = "hidden"; 
 }
 
 function showClearButton() {
@@ -11,6 +11,11 @@ function showClearButton() {
     }
 }
 
+// function getSearchUrl(query, currentPage) {
+//     return getComputedStyle(document.documentElement).getPropertyValue('--search-url') +
+//            '?q=' + encodeURIComponent(query) +
+//            '&page=' + currentPage;
+// }
 
 $(document).ready(function() {
     $('#loadMoreButton').click(function() {
@@ -21,7 +26,7 @@ $(document).ready(function() {
         // console.log('Current page:', currentPage);
 
         $.ajax({
-            url: '/search',
+            url: searchUrl,
             type: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest' 

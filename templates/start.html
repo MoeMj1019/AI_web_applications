@@ -12,12 +12,16 @@
                 --background-url: url("{{ url_for("static", filename="images/bg_start.png") }}");
             }
         </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     </head>
     <body>
         <div class="search-container">
             <div class="search-box">
-                <h1>WebZone</h1>
+                <header class="seach-engine-name">
+                    <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WebZone" /> -->
+                    <h1>WebZone</h1>
+                </header>
                 <form action="{{ url_for('search')}}" method="get">
                     <div class="search-bar">
                         <input

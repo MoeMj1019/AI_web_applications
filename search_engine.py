@@ -34,7 +34,7 @@ app = Flask(__name__)
 app.debug=True
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/', methods=['POST'])
 def add_to_crawler():
     if request.method == 'POST':
         url = request.form['crawlInput']

@@ -33,7 +33,7 @@ footer {
 
 .content {
     flex-grow: 1;
-    margin-top: 20px; /* Adjusted margin to create space for the crawler input */
+    margin-top: 20px; 
 }
 
 .footer-container {
@@ -57,18 +57,30 @@ footer {
     color: #007bff;
 }
 
-/* index */
+/* #################### start #################### */
 
+.seach-engine-name {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+header.seach-engine-name h1:hover {
+    text-decoration: none;
+    color: #009688;
+    transform: scale(1.1);
+}
 .search-bar {
     position: relative;
     display: flex;
-    align-items: center; /* Align items vertically */
+    align-items: center;
 }
 
 .search-bar input[type="text"] {
     flex-grow: 1;
     padding: 10px;
-    padding-right: 30px; /* Add right padding to avoid text under the clear button */
+    padding-right: 30px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -77,7 +89,7 @@ footer {
 
 .search-bar .clear-btn {
     position: absolute;
-    right: 10px; /* Position to the right inside the search bar */
+    right: 10px;
     top: 40%;
     transform: translateY(-50%);
     background: none;
@@ -86,7 +98,7 @@ footer {
     font-size: 1.2em;
     cursor: pointer;
     color: #333;
-    visibility: hidden; /* Start with button hidden */
+    visibility: hidden; 
 }
 
 .search-bar .clear-btn:hover {
@@ -176,7 +188,8 @@ footer {
 
 
 
-/* result */
+/* #################### result #################### */
+
 
 header {
     display: flex;

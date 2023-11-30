@@ -7,13 +7,10 @@ from logging.handlers import RotatingFileHandler
 
 logger = logging.getLogger('seach_engine_flask')
 logger.setLevel(logging.INFO)
-
 handler = RotatingFileHandler('logs/flask_search_engine.log', maxBytes=10*1024*1024, backupCount=3)
 handler.setLevel(logging.INFO)
-
 formatter = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
 handler.setFormatter(formatter)
-
 logger.addHandler(handler)
 
 logger_crwler = logging.getLogger('to_crawl_queue')
@@ -114,8 +111,7 @@ def internal_error(error):
 
 def get_args():
     parser = ArgumentParser()
-    parser.add_argument("-p", "--index_path", type=str, default="search_index", help="Index folder")
-    parser.add_argument("-d", "--debug", type=bool, default=True ,help="run app in debug mode" ) # debug
+    parser.add_argument("-i", "--index_path", type=str, default="search_index", help="Index folder")
     return parser.parse_args()
 
 if __name__ == '__main__':

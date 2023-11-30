@@ -30,7 +30,7 @@ logging.basicConfig(level=logging.INFO)
 # -------------------------- Crawler Class --------------------------
 
 DEFAULT_CONSTRAINTS = {
-    "url_constraints" : (ValidFileExtension(["","html", "htm", "xml","asp","php","jsp","xhtml","shtml","xml","json"])),
+    "url_constraints" : (ValidFileExtension(["","html", "htm", "xml","asp","jsp","xhtml","shtml","xml","json"])),
     "response_constraints" : (ValidStatusCode(),ValidContentType()),
     "infoExtraction_constraints" : (NotVisitedRecently(time_delta=1, time_unit="days"))
     }

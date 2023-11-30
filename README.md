@@ -1,26 +1,76 @@
-# search engine - AI_web_applications
+# search engine<WebZone> - AI_and_Web_applications
 
+## Description
+this is an implementation of a search engine;
+- the seach index is built on top of whoosh library
+- the search engine is implemented using flask app
 
+## Installation
+see requirements.txt for the required packages
+```
+pip install -r requirements.txt
+```
 
-### TODO:
+## Usage
+run the flask app
+- in debug mode
+```
+python search_engine.py -i <index_dir>
+```
+index_dir: the directory of the index to be used by the search engine
+- in production mode
+```
+flask --app search_engine run
+```
+## Features
 
-- [x] Search query
-    - [x] better results/ordering
-        <!-- - [x] ORed terms after ANDed terms -->
-        - [x] PageRank  
-    <!-- - [x] spell check -->
-        - [x] make it faster
-        - [x] add links to the results
+### Indexer:
+- Schema: 
+    url=ID(stored=True, unique=True)
+    title=TEXT(stored=True),
+    description=TEXT(stored=True),
+    time_stamp=DATETIME(stored=True),
+    content=TEXT(analyzer=StemmingAnalyzer(), spelling=True, stored=stored_content)
 
-- [x] crawler
-    - [x] IDDFS search ? or something else
-    - [x] multi-threading
-    - [x] decide what to do with other data types (eg get the text from pdf files, description from images, videos, etc)
+### Crawler:
+- 2 crawlers are implemented:
+    - a sequential crawler
+    - a parallel crawler <asynchrone>
+- the crawler has multiple constraints that can be applied in various combinations and in various levels (WebSearchEngine/constraints.py):
+    - same domain constraint
+    - valid status code constraint
+    - valid content type constraint
+    - valid file extension constraint
+    - recently visited constraint
+    - more can be added easily
+- the crawler can be configured to store the content of the crawled pages or store only summary statistics
+    
+- run the sequential crawler
+```
+ python run_crawler.py -i <index_dir> -m <max_iteration> -s 
+```
+-s: store the content of the crawled pages ( not only summary statistics ) 
+specify the root urls in ROOT_URL in run_crawler.py
+or 
+```
+<urls> OR file_of_urls | python run_crawler.py -i <index_dir> -m <max_iteration> -s --urls_from_stdin
+```
+you can configure the constraints in run_crawler.py
+- run the parallel crawler
+```
+TODO
+```
 
-- [x] web interface
-    - [x] icons ...
-    - [x] better styling with some framework (e.g. Bootstrap)
+### search query:
+- the search is implemented sequentially, only a small number of results are searched and returned at a time, more results are generated on demand
+- the results of the search are wighted such that they favor AND search and gradully degrade to OR search
+- the search query is parsed using a combination of whoosh query parser
+- the ranking of the result can be configured with a whoosh scoring object, currently used: BM25F
+- query will be SPELLCHECKED, the currected query will be suggested to the user and can be directly used to search
 
-
-- [x] Ideas:
-    - [x] let user provide a urls / domains / topics to a queue for the next run of the crawler (with limitations)
+### web interface:
+- flask app ( search_engine.py )
+- a simple css design is used, with a some javascript functions, focus is on smooth navigation and ease of use
+- start and search page can process the search query and display the results
+- crawl queue page can take input of urls or topics to be considered for crawling in the next iteration ( the crawling based on these inputs is not implemented yet )
+- more search results load dynamically with a load more button

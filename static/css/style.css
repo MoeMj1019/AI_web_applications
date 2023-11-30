@@ -233,6 +233,12 @@ header.seach-engine-name h1:hover {
 
 /* #################### result #################### */
 
+.no-results {
+    text-align: center; 
+    font-size: 18px;
+    color: #777;
+    margin-top: 20px;
+}
 
 header {
     display: flex;

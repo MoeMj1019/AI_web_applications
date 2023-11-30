@@ -65,6 +65,7 @@
         </div>
 
         <div class="resuts-box">
+            {% if links_info %}
             <ul class="result-list">
                 {% for link_info in links_info %}
                 <li>
@@ -80,6 +81,9 @@
                 </li>
                 {% endfor %}
             </ul>
+            {% else %}
+            <p class="no-results">No results found</p>
+            {% endif %}
         </div>
         <div class="load-more">
             <input type="hidden" id="currentPage" value="1" />
@@ -96,7 +100,7 @@
                     <a href="{{ url_for('crawl_queue') }}">Crawl-Queue</a>
                     <a href="{{ url_for('about') }}">About</a>
                     <a href="{{ url_for('contact') }}">Contact</a>
-                    <a href="https://github.com/MockaWolke/search_engine_project" target="_blank">Documentation</a>
+                    <a href="https://github.com/MoeMj1019/search_engine_ai-web" target="_blank">Documentation</a>
                 </div>
             </div>
         </footer>

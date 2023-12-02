@@ -9,9 +9,10 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-# TODO :
+# TODO : 
 #       - write results of each step ( crawling, info extraction, indexing) seperatly to a file/index
 #               --> way better seperation of concerns/tasks/checks and better debugging
+#       - better Search/traversing algorithm
 #       - multi-threading
 #       - handle robots.txt
 #       - deal with query parameters in urls
@@ -28,6 +29,8 @@ logging.basicConfig(level=logging.INFO)
 # -------------------------------------------------------------------
 # -------------------------------------------------------------------
 # -------------------------- Crawler Class --------------------------
+
+MAX_URLS_TO_VISIT = 100000
 
 DEFAULT_CONSTRAINTS = {
     "url_constraints" : (ValidFileExtension(["","html", "htm", "xml","asp","jsp","xhtml","shtml","xml","json"])),
@@ -114,6 +117,10 @@ class Crawler:
             iteration += 1
 
             logging.info(f" {'#'*10} iteration {iteration} {'#'*10}")
+
+            # very simple memory management
+            # urls_to_visit = list(set(urls_to_visit)) # remove duplicates
+            urls_to_visit = urls_to_visit[:MAX_URLS_TO_VISIT] # limit the number of urls to visit
 
             url = urls_to_visit.pop(very_simple_search_variable) # get the next url to visit
             logging.info(f" URL: {url}")

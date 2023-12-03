@@ -11,7 +11,7 @@ from argparse import ArgumentParser
 
 def get_args():
     parser = ArgumentParser()
-    parser.add_argument("-i", "--index_path", type=str, default="search_index", help="Index folder id")
+    parser.add_argument("-i", "--index_path", type=str, default="Search_Indecies/search_index", help="Index folder id")
     parser.add_argument("-s", "--store_content", default=False, action="store_true", help="Stored Field for the content in index")
     parser.add_argument("-m", "--max_iterations", type=int, default=1000, help="Maximum number of iterations for the crawler")
     parser.add_argument("--search_method", type=str, default="bfs", help="Search method for the crawler")

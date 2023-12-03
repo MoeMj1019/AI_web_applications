@@ -114,7 +114,7 @@ def internal_error(error):
 
 def get_args():
     parser = ArgumentParser()
-    parser.add_argument("-i", "--index_path", type=str, default="search_index", help="Index folder")
+    parser.add_argument("-i", "--index_path", type=str, default="Search_Indecies/search_index", help="Index folder")
     parser.add_argument("-p", "--port", type=int, default=5000, help="Port to run the server on")
     return parser.parse_args()
 

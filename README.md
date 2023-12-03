@@ -25,6 +25,7 @@ flask --app search_engine run
 ## Features
 
 ### Indexer:
+- it's recommended to place all indecies in the <Search_Indecies> directory and the name of their directory should start with "index_" or search_index_" in order to be ignored by git
 - Schema: 
     url=ID(stored=True, unique=True)  
     title=TEXT(stored=True),  

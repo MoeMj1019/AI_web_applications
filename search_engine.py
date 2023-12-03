@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for , abort , jsonify
-from WebSearchEngine import WebIndex
+from WebSearchEngine.index import WebIndex
 from WebSearchEngine.crawler_util import check_added_content_crawler
 from argparse import ArgumentParser
 import logging

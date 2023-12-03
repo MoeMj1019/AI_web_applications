@@ -1,6 +1,6 @@
-from WebSearchEngine import Crawler
-from WebSearchEngine import WebIndex
-from WebSearchEngine import InfoParser
+from WebSearchEngine.crawler import Crawler
+from WebSearchEngine.index import WebIndex
+from WebSearchEngine.infoparser import InfoParser
 from WebSearchEngine.constraints import *
 from WebSearchEngine.crawler_async import AsyncCrawler , set_index , set_info_parser , set_store_to_index , set_store_to_json
 

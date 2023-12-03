@@ -14,7 +14,8 @@ myenv/
 .vscode/
 # data directories
 search_index*/
-Search_Indecies/
+index_*/
+# Search_Indecies/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

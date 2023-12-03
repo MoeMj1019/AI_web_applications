@@ -1,6 +1,6 @@
 from .constraints import *
 from .index import WebIndex
-from .parser import InfoParser
+from .infoparser import InfoParser
 from .crawler_util import get_full_urls
 
 import requests
@@ -67,7 +67,7 @@ class Crawler:
             print("No/Not_Valid search index provided, using default")
             self.search_index = WebIndex()
 
-        if hasattr(info_parser, "get_info") and callable(info_parser.get_info):
+        if hasattr(info_parser, "get_info") and callable(info_parser.get_info_from_response):
             self.info_parser = info_parser
         else:
             print("No/Not_Valid info parser provided, using default")
@@ -156,7 +156,7 @@ class Crawler:
                 continue
             logging.debug(" - valid for info extraction")
 
-            info = self.info_parser.get_info(url, response) # extract the info from the response
+            info = self.info_parser.get_info_from_response(url, response) # extract the info from the response
             self.add_to_index(url, info) # add extracted url and info to the search index and url index
             logging.debug(" - Added to index")
 
@@ -256,4 +256,3 @@ class Crawler:
             elif not isinstance(constraint, InfoExtractionConstraint):
                 raise TypeError("infoExtraction_constraints should be a list of objects of type infoExtraction_constraints")
             
-

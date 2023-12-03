@@ -26,29 +26,39 @@ flask --app search_engine run
 
 ### Indexer:
 - Schema: 
-    url=ID(stored=True, unique=True)
-    title=TEXT(stored=True),
-    description=TEXT(stored=True),
-    time_stamp=DATETIME(stored=True),
-    content=TEXT(analyzer=StemmingAnalyzer(), spelling=True, stored=stored_content)
+    url=ID(stored=True, unique=True)  
+    title=TEXT(stored=True),  
+    description=TEXT(stored=True),  
+    time_stamp=DATETIME(stored=True),  
+    content=TEXT(analyzer=StemmingAnalyzer(), spelling=True, stored=stored_content)  
 
 ### Crawler:
-- 2 crawlers are implemented:
-    - a sequential crawler
-    - a parallel crawler <asynchrone>
-- the crawler has multiple constraints that can be applied in various combinations and in various levels (WebSearchEngine/constraints.py):
-    - same domain constraint
-    - valid status code constraint
-    - valid content type constraint
-    - valid file extension constraint
-    - recently visited constraint
-    - more can be added easily
-- the crawler can be configured to store the content of the crawled pages or store only summary statistics
-    
-- run the sequential crawler
+2 crawlers are implemented:
+- a sequential crawler
+- a parallel crawler <asynchrone>
+
+it has multiple constraints that can be applied in various combinations and in various levels (WebSearchEngine/constraints.py):
+- same domain constraint
+- valid status code constraint
+- valid content type constraint
+- valid file extension constraint
+- recently visited constraint
+- more can be added easily
+
+it be configured to store the content of the crawled pages or store only summary statistics
+
+the async crawler has 2 options to store the content of the crawled pages:
+-   write proccesd content to the index directory
+-   write raw content temporarly to a directory, process and write later to the index and delete the raw content
+
+the second option has more space for optimazation, sofar the first option is on avarage faster in the whole crawling and storing process  
+  
+
+run the sequential or parallel crawler
 ```
- python run_crawler.py -i <index_dir> -m <max_iteration> -s 
+ python run_crawler.py -i <index_dir> -m <max_iteration> -s --async_crawl
 ```
+--async_crawl: use the parallel crawler
 -s: store the content of the crawled pages ( not only summary statistics ) 
 specify the root urls in ROOT_URL in run_crawler.py
 or 
@@ -56,10 +66,7 @@ or
 <urls> OR file_of_urls | python run_crawler.py -i <index_dir> -m <max_iteration> -s --urls_from_stdin
 ```
 you can configure the constraints in run_crawler.py
-- run the parallel crawler
-```
-TODO
-```
+
 
 ### search query:
 - the search is implemented sequentially, only a small number of results are searched and returned at a time, more results are generated on demand

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for , abort , jsonify
-from WebSearchEngine.index import WebIndex
+from WebSearchEngine import WebIndex
 from WebSearchEngine.crawler_util import check_added_content_crawler
 from argparse import ArgumentParser
 import logging
@@ -25,7 +25,7 @@ crawler_queue = "crawler_queue.txt"
 
 RESULTS_LIMIT = 20
 RESULTS_EXTENTION = 10
-SEARCH_INDEX = WebIndex("search_index")
+SEARCH_INDEX = WebIndex("Search_Indecies/search_index", name="Main Index")
     
 app = Flask(__name__)
 app.debug=True
@@ -52,11 +52,13 @@ def crawl_queue():
 @app.route('/')
 def start():
     logger.info('start route accessed')
-    return render_template('start.html')
+    index_name = SEARCH_INDEX.name
+    return render_template('start.html', index_name=index_name)
 
 @app.route('/search', methods=['GET'])
 def search():
     logger.info('Search route accessed')
+    index_name = SEARCH_INDEX.name
     if request.method == 'GET':
         query = request.args.get('q', default='', type=str)
         page = request.args.get('page', default=1, type=int)
@@ -84,7 +86,8 @@ def search():
         else:
             return render_template('result.html', query=query, links_info=links_info, 
                                corrected_query=corrected_query ,
-                               corrected_query_formated=corrected_query_formated)
+                               corrected_query_formated=corrected_query_formated,
+                               index_name=index_name)
 
     else:
         logger.warning('Redirecting to stars route')
@@ -112,8 +115,9 @@ def internal_error(error):
 def get_args():
     parser = ArgumentParser()
     parser.add_argument("-i", "--index_path", type=str, default="search_index", help="Index folder")
+    parser.add_argument("-p", "--port", type=int, default=5000, help="Port to run the server on")
     return parser.parse_args()
 
 if __name__ == '__main__':
     args = get_args()
-    app.run(host='0.0.0.0')
+    app.run(port=args.port, host='0.0.0.0')

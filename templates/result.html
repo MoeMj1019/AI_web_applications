@@ -26,6 +26,11 @@
                 <a href="{{ url_for('start') }}">
                     <h1 class="highlight-main-text">WebZone Search</h1>
                 </a>
+                {% if index_name %}
+                <div id="index-name">
+                    <p>Index: "{{ index_name }}"</p>
+                </div>
+                {% endif %}
                 <form action="{{ url_for('search')}}" method="get">
                     <div id="search_bar_result" class="search-bar">
                         <input

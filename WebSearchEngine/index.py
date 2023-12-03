@@ -12,7 +12,8 @@ from bs4 import BeautifulSoup
 
 
 class WebIndex:
-    def __init__(self, index_dir="search_index", stored_content=False):
+    def __init__(self, index_dir="Search_Indecies/search_index_default", stored_content=False, name:str=None):
+        self.name = name if name and isinstance(name,str) else index_dir
         self.__index_dir = index_dir
         self.schema = Schema(url=ID(stored=True, unique=True),  # THERE HAS TO BE A URL FIELD
                             title=TEXT(stored=True),

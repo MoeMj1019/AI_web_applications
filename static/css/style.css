@@ -97,6 +97,12 @@ header.highlight-main-text h1:hover {
     transform: scale(1.1);
 }
 
+#index-name {
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
 /* #################### start #################### */
 
 .seach-engine-name {

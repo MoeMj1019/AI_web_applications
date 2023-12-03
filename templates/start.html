@@ -22,6 +22,11 @@
                     <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WebZone" /> -->
                     <h1>WebZone</h1>
                 </header>
+                {% if index_name %}
+                <div id="index-name">
+                    <p>Index: "{{ index_name }}"</p>
+                </div>
+                {% endif %}
                 <form action="{{ url_for('search')}}" method="get">
                     <div class="search-bar">
                         <input

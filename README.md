@@ -59,10 +59,12 @@ run the sequential or parallel crawler
 ```
  python run_crawler.py -i <index_dir> -m <max_iteration> -s --async_crawl
 ```
---async_crawl: use the parallel crawler
--s: store the content of the crawled pages ( not only summary statistics ) 
-specify the root urls in ROOT_URL in run_crawler.py
-or 
+- -i <index_dir>: preferablly start with Search_Indecies/index_<name> or Search_Indecies/search_index_<name>
+- --async_crawl: use the parallel crawler  
+- -s: store the content of the crawled pages ( not only summary statistics )   
+
+you can specify the root urls in ROOT_URL in run_crawler.py   
+or give a file / stdin of urls to be crawled:
 ```
 <urls> OR file_of_urls | python run_crawler.py -i <index_dir> -m <max_iteration> -s --urls_from_stdin
 ```

@@ -68,7 +68,7 @@ class AsyncCrawler:
             start_url, 
             max_pages=100, 
             concurrency=10, 
-            file_types=('', '.html', '.htm', '.xml','.asp','.php','.jsp','.xhtml','.shtml','.xml','.json'),
+            file_types:tuple=('', '.html', '.htm', '.xml','.asp','.php','.jsp','.xhtml','.shtml','.xml','.json'),
             file_types_ignore=('ico', 'png', 'jpg', 'jpeg'),
             status_codes=(200,)
             ):
@@ -147,6 +147,9 @@ class AsyncCrawler:
             if self.html_contents:
                 # self.write_to_json()
                 self.write_to_compressed_json()
+        
+        if STORE_TO_INDEX:
+            INDEX.commit_add_buffer() # commit the remaining buffer
         # ----------------------------------------------
 
     def print_stats(self, start_time, queue_length):
@@ -170,7 +173,11 @@ class AsyncCrawler:
                         # ----------------------------------------------
 
                         loop = asyncio.get_event_loop()
-                        new_links = await loop.run_in_executor(self.executor, self.extract_links, url, html)
+                        try:
+                            new_links = await loop.run_in_executor(self.executor, self.extract_links, url, html)
+                        except Exception as e:
+                            print(f'Exception while extracting links from {url}: {str(e)}')
+                            new_links = []
                         queue.extend(new_links)
             except Exception as e:
                 #print(f'Exception while fetching {url}: {str(e)}')

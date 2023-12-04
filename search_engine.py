@@ -21,16 +21,16 @@ formatter = logging.Formatter('%(message)s')
 handler.setFormatter(formatter)
 logger_crwler.addHandler(handler)
 
-crawler_queue = "crawler_queue.txt"
-
 RESULTS_LIMIT = 20
 RESULTS_EXTENTION = 10
-SEARCH_INDEX = WebIndex("Search_Indecies/search_index", name="Main Index")
-INDEX_NAME = SEARCH_INDEX.name
 AVAILABLE_INDEXES = {
-                    'Main Index': 'Search_Indecies/search_index',   
+                    'Uni/wiki Index': 'Search_Indecies/search_index',   
                     'Demo Index': 'Search_Indecies/search_index_demo',
+                    'CoxiPedia': 'Search_Indecies/index_coxipedia',
                     }
+SEARCH_INDEX = WebIndex(AVAILABLE_INDEXES['Uni/wiki Index'], name='Uni/wiki Index')
+INDEX_NAME = SEARCH_INDEX.name
+
     
 app = Flask(__name__)
 app.debug=True
@@ -146,7 +146,7 @@ def internal_error(error):
 
 def get_args():
     parser = ArgumentParser()
-    parser.add_argument("-i", "--index_path", type=str, default="Search_Indecies/search_index", help="Index folder")
+    # parser.add_argument("-i", "--index_path", type=str, default="Search_Indecies/search_index", help="Index folder")
     parser.add_argument("-p", "--port", type=int, default=5000, help="Port to run the server on")
     return parser.parse_args()
 

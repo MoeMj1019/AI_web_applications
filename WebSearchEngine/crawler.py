@@ -159,6 +159,8 @@ class Crawler:
             info = self.info_parser.get_info_from_response(url, response) # extract the info from the response
             self.add_to_index(url, info) # add extracted url and info to the search index and url index
             logging.debug(" - Added to index")
+        
+        self.search_index.commit_add_buffer() # commit the left over of add buffer
 
 
 

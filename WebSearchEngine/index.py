@@ -10,9 +10,8 @@ from whoosh import scoring
 from whoosh import qparser
 from bs4 import BeautifulSoup
 
-
 class WebIndex:
-    def __init__(self, index_dir="Search_Indecies/search_index", stored_content=False, name:str=None):
+    def __init__(self, index_dir="Search_Indecies/search_index", stored_content=False, name:str=None, max_buffer_size=100):
         self.name = name if name and isinstance(name,str) else index_dir
         self.__index_dir = index_dir
         self.schema = Schema(url=ID(stored=True, unique=True),  # THERE HAS TO BE A URL FIELD
@@ -25,7 +24,9 @@ class WebIndex:
 
         self.set_parser()
         self.__correction_cache = dict()
-        # self.correctors = {"content": spelling.Corrector()} 
+        # self.correctors = {"content": spelling.Corrector()}
+        self.__add_buffer = []
+        self.__max_add_buffer_size = max_buffer_size
 
     def set_parser(self, or_and_scaler=0.9):
         """
@@ -49,13 +50,31 @@ class WebIndex:
                 **kwargs: dict of the entry attributes
         """
         if not self.entry_has_ID(**kwargs):
-            print("Warning: No url was provided for the entry to be added")
+            print("Warning: No url<ID> was provided for the entry to be added")
             return 
         kwargs = self.validate_entry(**kwargs)
         # print("kwargs before add_document:", kwargs.keys())
         # print("kwargs before add_document:", [type(kwargs[key]) for key in kwargs.keys()])
-        with self.__get_writer() as writer:
-            writer.add_document(**kwargs) # commiting is done automatically when exiting the with block (writerer closes) 
+        # with self.__get_writer() as writer:
+        #         writer.add_document(**kwargs) 
+        if len(self.__add_buffer) >= self.__max_add_buffer_size:
+            self.commit_add_buffer()
+        else:
+            self.__add_buffer.append(kwargs)
+    
+    def commit_add_buffer(self):
+        """
+        commit the add buffer
+        """
+        # print(f"commiting {len(self.__add_buffer)} entires from buffer")
+        if self.__add_buffer:
+            # with self.__get_writer() as writer:
+            with self.index.writer() as writer:
+                for entry in self.__add_buffer:
+                    writer.add_document(**entry) # commiting is done automatically when exiting the context maneger block (writerer closes) 
+            self.__add_buffer.clear() # clear the buffer
+        
+
     
     # MAYBE always return a results with full attributes (fill missing attributes with None/"") ?
     # MAYBE no limit by default ?
@@ -210,3 +229,13 @@ class WebIndex:
     def __str__(self) -> str:
         return self.index.__str__()
     
+    def __del__(self):
+        """
+        Destructor for the WebIndex class.
+        Commits any remaining entries in the __add_buffer upon object destruction.
+        """
+        try:
+            if self.__add_buffer:  # Check if there's anything to commit
+                self.commit_add_buffer()
+        except Exception as e:
+            print(f"Error during WebIndex destruction: {e}")

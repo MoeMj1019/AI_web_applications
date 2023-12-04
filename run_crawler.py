@@ -44,7 +44,7 @@ if __name__ == "__main__":
     INDEX = WebIndex(f"{args.index_path}",
                      stored_content=args.store_content)
     
-    allowed_extensions = ["","html", "htm", "xml","asp","jsp","xhtml","shtml","xml","json"]
+    allowed_extensions = ("","html", "htm", "xml","asp","jsp","xhtml","shtml","xml","json")
     constraints_for_url = [
                                 SameDomain(allow_subdomains=True),
                                 ValidFileExtension(allowed_extensions)

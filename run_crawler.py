@@ -44,31 +44,29 @@ if __name__ == "__main__":
     INDEX = WebIndex(f"{args.index_path}",
                      stored_content=args.store_content)
     
+    allowed_extensions = ["","html", "htm", "xml","asp","jsp","xhtml","shtml","xml","json"]
+    constraints_for_url = [
+                                SameDomain(allow_subdomains=True),
+                                ValidFileExtension(allowed_extensions)
+                            ]
+    constraints_for_response = [
+                                    ValidStatusCode(),
+                                    ValidContentType()
+                                ]
+    constraints_for_infoExtraction = [
+                                        NotVisitedRecently(time_delta=1, time_unit="days")
+                                        ]
     if args.async_crawl:
-        start_url = ROOT_URLS[1]
+        start_url = ROOT_URLS[0]
         set_store_to_index(True)
         set_index(INDEX)
         set_info_parser(InfoParser())
-        crawler = AsyncCrawler(start_url, max_pages=args.max_iterations, concurrency=200)
+        crawler = AsyncCrawler(start_url, max_pages=args.max_iterations, concurrency=200,
+                               file_types=allowed_extensions)
         asyncio.run(crawler.crawl())
         # cProfile.run('asyncio.run(crawler.crawl())', 'results-q.prof')
 
     else:
-
-        allowed_extensions = ["","html", "htm", "xml","asp","jsp","xhtml","shtml","xml","json"]
-        constraints_for_url = [
-                                SameDomain(allow_subdomains=True),
-                                ValidFileExtension(allowed_extensions)
-                            ]
-        constraints_for_response = [
-                                    ValidStatusCode(),
-                                    ValidContentType()
-                                ]
-        constraints_for_infoExtraction = [
-                                        NotVisitedRecently(time_delta=1, time_unit="days")
-                                        ]
-
-
         # initialize the crawler 
         my_crawler = Crawler(
             *ROOT_URLS,

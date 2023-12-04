@@ -26,6 +26,7 @@ if __name__ == "__main__":
     print("###### store_content : ",args.store_content)
     print("###### max_iterations : ",args.max_iterations)
     print("###### search_method : ",args.search_method)
+    print("###### urls_from_stdin : ",args.urls_from_stdin)
     print("###### async_crawl : ",args.async_crawl)
     print("##############################################")
 

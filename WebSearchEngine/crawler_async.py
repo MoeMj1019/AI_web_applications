@@ -15,6 +15,26 @@ import os
 import json
 import gzip
 
+import logging
+from logging.handlers import RotatingFileHandler
+
+logger = logging.getLogger(__name__)
+
+logger.setLevel(logging.DEBUG)
+
+c_handler = logging.StreamHandler() 
+f_handler = RotatingFileHandler('logs/crawler_async.log', maxBytes=10*1024*1024, backupCount=2) 
+c_handler.setLevel(logging.DEBUG)
+f_handler.setLevel(logging.DEBUG)
+
+c_format = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+f_format = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+c_handler.setFormatter(c_format)
+f_handler.setFormatter(f_format)
+
+logger.addHandler(c_handler)
+logger.addHandler(f_handler)
+
 # --------------------------------------------------------------------------------------------------
 # curently the write to index is faster, because of lack of time to optimize the write to temporary files and then to index
 STORE_TO_INDEX = False # slower but more memory efficient , both in and external memory  
@@ -44,6 +64,7 @@ def set_info_parser(info_parser:InfoParser):
 def store_to_index(url:str, html:str, index:WebIndex, info_parser:InfoParser):
     info = info_parser.get_info_from_html(url, html)
     index.add(**info)
+    logger.debug(f"store_to_index: {url} done")
 
 def set_crawler_content_dir(crawler_content_dir:str):
     global CRAWLER_CONTENT_DIR
@@ -70,7 +91,7 @@ class AsyncCrawler:
             concurrency=10, 
             file_types:tuple=('', '.html', '.htm', '.xml','.asp','.php','.jsp','.xhtml','.shtml','.xml','.json'),
             file_types_ignore=('ico', 'png', 'jpg', 'jpeg'),
-            status_codes=(200,)
+            status_codes=(200,300,301,302,303,304,305,306,307,308)
             ):
         self.start_url = start_url
         self.root_parsed = urlparse(self.start_url)
@@ -102,7 +123,6 @@ class AsyncCrawler:
             self.create_directory()
         # ----------------------------------------------
 
-
     async def crawl(self):
         print(f'{"-"*40}')
         print(f'async crawl with global variables:')
@@ -112,6 +132,7 @@ class AsyncCrawler:
         print(f'STORE_TO_JSON: {STORE_TO_JSON}')
         print(f'CRAWLER_CONTENT_DIR: {CRAWLER_CONTENT_DIR}')
         print(f'{"-"*40}')
+        print(f'Starting crawl of {self.start_url} with max_pages={self.max_pages} and concurrency={self.concurrency}')
 
         start_time = time.time()
         self.semaphore = asyncio.Semaphore(self.concurrency)
@@ -158,9 +179,11 @@ class AsyncCrawler:
         print(f'\rVisited {self.pages_crawled} pages in {elapsed_time:.2f} seconds ({speed:.2f} pages/second), {queue_length} unvisited links', end='', flush=True)
 
     async def fetch_and_follow(self, session, url, queue):
+        logger.debug(f"fetch_and_follow: {url}")
         async with self.semaphore:
             try:
                 async with session.get(url, timeout=self.timeout) as response:
+                    logger.debug(f"status_codes: {response.status}")
                     if response.status in self.status_codes:
                         html = await response.text()
 
@@ -175,12 +198,14 @@ class AsyncCrawler:
                         loop = asyncio.get_event_loop()
                         try:
                             new_links = await loop.run_in_executor(self.executor, self.extract_links, url, html)
+                            logger.debug(f"new links count: {len(new_links)}")
                         except Exception as e:
                             print(f'Exception while extracting links from {url}: {str(e)}')
                             new_links = []
                         queue.extend(new_links)
             except Exception as e:
                 #print(f'Exception while fetching {url}: {str(e)}')
+                logger.debug(f'Exception while fetching {url}: {str(e)}')
                 queue.append(url)  # Re-add the URL to the queue
 
     #def extract_links(self, base_url, html):

@@ -10,6 +10,26 @@ from whoosh import scoring
 from whoosh import qparser
 from bs4 import BeautifulSoup
 
+import logging
+from logging.handlers import RotatingFileHandler
+
+logger = logging.getLogger(__name__)
+
+logger.setLevel(logging.INFO)
+
+c_handler = logging.StreamHandler() 
+f_handler = RotatingFileHandler('logs/index.log', maxBytes=10*1024*1024, backupCount=2) 
+c_handler.setLevel(logging.DEBUG)
+f_handler.setLevel(logging.DEBUG)
+
+c_format = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+f_format = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+c_handler.setFormatter(c_format)
+f_handler.setFormatter(f_format)
+
+logger.addHandler(c_handler)
+logger.addHandler(f_handler)
+
 class WebIndex:
     def __init__(self, index_dir="Search_Indecies/search_index", stored_content=False, name:str=None, max_buffer_size=100):
         self.name = name if name and isinstance(name,str) else index_dir

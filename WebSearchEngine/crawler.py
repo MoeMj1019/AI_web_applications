@@ -6,8 +6,24 @@ from .crawler_util import get_full_urls
 import requests
 from bs4 import BeautifulSoup
 import logging
+from logging.handlers import RotatingFileHandler
 
-logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+logger.setLevel(logging.INFO)
+
+c_handler = logging.StreamHandler() 
+f_handler = RotatingFileHandler('logs/crawler.log', maxBytes=10*1024*1024, backupCount=2) 
+c_handler.setLevel(logging.DEBUG)
+f_handler.setLevel(logging.DEBUG)
+
+c_format = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+f_format = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+c_handler.setFormatter(c_format)
+f_handler.setFormatter(f_format)
+
+logger.addHandler(c_handler)
+logger.addHandler(f_handler)
 
 # TODO : 
 #       - write results of each step ( crawling, info extraction, indexing) seperatly to a file/index
@@ -116,22 +132,22 @@ class Crawler:
         while len(urls_to_visit) > 0 and iteration < max_iterations:
             iteration += 1
 
-            logging.info(f" {'#'*10} iteration {iteration} {'#'*10}")
+            logger.info(f" {'#'*10} iteration {iteration} {'#'*10}")
 
             # very simple memory management
             # urls_to_visit = list(set(urls_to_visit)) # remove duplicates
             urls_to_visit = urls_to_visit[:MAX_URLS_TO_VISIT] # limit the number of urls to visit
 
             url = urls_to_visit.pop(very_simple_search_variable) # get the next url to visit
-            logging.info(f" URL: {url}")
+            logger.info(f" URL: {url}")
 
             if url in visited_urls: # check if the url is visited before
                 continue
-            logging.debug(" - not visited before")
+            logger.debug(" - not visited before")
 
             if not self.url_requeust_valid(url=url): # check if the url fulfills all constraints, if not, skip it
                 continue
-            logging.debug(" - valid url")
+            logger.debug(" - valid url")
 
             # get the response
             response = None
@@ -143,22 +159,22 @@ class Crawler:
 
             if not self.url_process_valid(response): # check if the response fulfills all constraints, if not, skip it
                 continue
-            logging.debug(" - valid response")
+            logger.debug(" - valid response")
 
             urls = self.get_urls(url, response) # extract the urls from the response
             urls_to_visit.extend(urls)
             # for item in urls: # add the extracted urls to the urls_to_visit list
             #     urls_to_visit.append(item) 
             visited_urls.add(url) # update the visited urls set
-            logging.debug(" - extracted urls")
+            logger.debug(" - extracted urls")
 
             if not self.url_infoExtraction_valid(url):
                 continue
-            logging.debug(" - valid for info extraction")
+            logger.debug(" - valid for info extraction")
 
             info = self.info_parser.get_info_from_response(url, response) # extract the info from the response
             self.add_to_index(url, info) # add extracted url and info to the search index and url index
-            logging.debug(" - Added to index")
+            logger.debug(" - Added to index")
         
         self.search_index.commit_add_buffer() # commit the left over of add buffer
 
@@ -174,7 +190,7 @@ class Crawler:
         """
         for rule in self.url_constraints:
             if not rule(url):
-                logging.debug(f" - rule {rule} failed")
+                logger.debug(f" - rule {rule} failed")
                 return False
         return True
     
@@ -188,7 +204,7 @@ class Crawler:
         """
         for rule in self.response_constraints:
             if not rule(response):
-                logging.debug(f" - rule {rule} failed")
+                logger.debug(f" - rule {rule} failed")
                 return False
         return True
     
@@ -202,7 +218,7 @@ class Crawler:
         """
         for rule in self.infoExtraction_constraints:
             if not rule(url):
-                logging.debug(f" - rule {rule} failed")
+                logger.debug(f" - rule {rule} failed")
                 return False
         return True
 
@@ -222,7 +238,7 @@ class Crawler:
         try:
             base_url = base_url["href"]
         except :
-            # logging.warning(f" No base url found for this page : {url}")
+            # logger.warning(f" No base url found for this page : {url}")
             base_url = url
         
         standarized_urls = get_full_urls(base_url, new_urls)

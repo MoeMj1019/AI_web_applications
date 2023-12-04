@@ -8,6 +8,9 @@ import sys
 import asyncio
 import cProfile
 from argparse import ArgumentParser
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 def get_args():
     parser = ArgumentParser()

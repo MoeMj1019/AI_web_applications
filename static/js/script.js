@@ -17,11 +17,23 @@ function showClearButton() {
     }
 }
 
-// function getSearchUrl(query, currentPage) {
-//     return getComputedStyle(document.documentElement).getPropertyValue('--search-url') +
-//            '?q=' + encodeURIComponent(query) +
-//            '&page=' + currentPage;
-// }
+function validateSearch() {
+    var searchInput = document.getElementById('searchInput').value.trim();
+    if (searchInput === ''){
+        alert('Please enter a valid search query.');
+        return false; 
+    }
+    return true; 
+}
+
+function validateCrawlQueue() {
+    var crawlInput = document.getElementById('crawlInput').value.trim();
+    if (crawlInput === ''){
+        alert('Please enter a valid crawl query.');
+        return false; 
+    }
+    return true; 
+}
 
 $(document).ready(function() {
     $('#loadMoreButton').click(function() {
@@ -65,3 +77,45 @@ $(document).ready(function() {
         });
     });
 });
+
+
+function openModal() {
+    document.getElementById('indexModal').style.display = 'block';
+}
+
+// Function to close the modal
+function closeModal() {
+    document.getElementById('indexModal').style.display = 'none';
+}
+
+function setIndex() {
+    var index = document.getElementById('indexSelect').value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', setIndexUrl, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // Update the displayed index
+            var response = JSON.parse(xhr.responseText);
+            updateDisplayedIndex(response.index);
+        } else {
+            console.error('Error setting index:', xhr.responseText);
+        }
+        // console.log('Index set to:', index);
+    };
+    xhr.send('index=' + encodeURIComponent(index));
+}
+
+function updateDisplayedIndex(index) {
+    var indexValueElem = document.getElementById('index-value');
+    if (indexValueElem) {
+        indexValueElem.textContent = '"' + index + '"';
+    } else {
+        // Create the index value element if it doesn't exist
+        var indexNameDiv = document.getElementById('index-name');
+        indexValueElem = document.createElement('p');
+        indexValueElem.id = 'index-value';
+        indexValueElem.textContent = '"' + index + '"';
+        indexNameDiv.appendChild(indexValueElem);
+    }
+}

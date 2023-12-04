@@ -17,6 +17,7 @@
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
         <script>
             var searchUrl = "{{ url_for('search') }}";
+            var setIndexUrl = "{{ url_for('set_index') }}";
         </script>
     </head>
     <body>
@@ -26,12 +27,18 @@
                 <a href="{{ url_for('start') }}">
                     <h1 class="highlight-main-text">WebZone Search</h1>
                 </a>
-                {% if index_name %}
-                <div id="index-name">
-                    <p>Index: "{{ index_name }}"</p>
+                <div class="index-selection-container">
+                    <button class="open-modal-btn" onclick="openModal()">Choose Index</button>
+                    <div id="index-name">
+                        <p style="color: #0056b3">Index:</p>
+                        {% if index_name %}
+                        <p id="index-value">"{{ index_name }}"</p>
+                        {% else %}
+                        <p id="index-value">"Default"</p>
+                        {% endif %}
+                    </div>
                 </div>
-                {% endif %}
-                <form action="{{ url_for('search')}}" method="get">
+                <form action="{{ url_for('search')}}" method="get" onsubmit="return validateSearch()">
                     <div id="search_bar_result" class="search-bar">
                         <input
                             class="bar-input"
@@ -109,5 +116,21 @@
                 </div>
             </div>
         </footer>
+
+        <div id="indexModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <form id="indexForm">
+                    <h2>Choose Index</h2>
+                    <select name="index" id="indexSelect">
+                        {% for index_name in available_indecies %}
+                        <option value="{{ index_name }}">{{ index_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <br /><br />
+                    <input type="button" value="Set Index" onclick="setIndex()" />
+                </form>
+            </div>
+        </div>
     </body>
 </html>

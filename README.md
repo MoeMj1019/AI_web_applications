@@ -80,7 +80,10 @@ you can configure the constraints in run_crawler.py
 
 ### web interface:
 - flask app ( search_engine.py )
-- a simple css design is used, with a some javascript functions, focus is on smooth navigation and ease of use
-- start and search page can process the search query and display the results
-- crawl queue page can take input of urls or topics to be considered for crawling in the next iteration ( the crawling based on these inputs is not implemented yet )
+- the avaible indecies can be listed and selected for searching as well as adding urls/topics to the crawl queue
+- start and search page process the search query display the results
+- the inputs are validated and the user is informed of any errors 
+- the search query is spellchecked and the corrected query is suggested to the user
+- crawl queue page can take input of urls or topics to be considered for crawling in the next iteration ( the crawling based on these inputs is not implemented due to risks involved )
 - more search results load dynamically with a load more button
+- a simple css design is used, with a some javascript functions, focus is on smooth navigation and ease of use

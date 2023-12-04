@@ -197,6 +197,7 @@ header.seach-engine-name h1:hover {
     margin-top: 20px; /* Adjust as needed */
     margin-bottom: 20px; /* Adjust as needed */
     text-align: center;
+    font-size: 1.2em;
 }
 
 #crawl-queue-link a {
@@ -361,4 +362,111 @@ header a {
 
 .load-more-button:hover {
     background-color: #0056b3;
+}
+
+
+/* model */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6); /* Dimmed background */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto; /* Adjusted for better centering */
+    padding: 20px;
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 90%;
+    max-width: 400px; /* Adjusted width */
+    text-align: center; /* Centered text */
+}
+
+/* The Close Button */
+.close {
+    color: #666;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* Form and Elements inside Modal */
+.modal-content form {
+    font-size: 1rem;
+}
+
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.modal-content input[type="button"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.modal-content input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+
+button.open-modal-btn {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+    min-width: 150px;
+}
+
+button.open-modal-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Flex container */
+.index-selection-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Styling for the index name display */
+#index-name {
+    padding: 8px 15px;
+    color: #e46e6e;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
 }

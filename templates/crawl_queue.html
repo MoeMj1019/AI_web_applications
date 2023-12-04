@@ -14,6 +14,9 @@
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <script>
+            var setIndexUrl = "{{ url_for('set_index') }}";
+        </script>
     </head>
     <body>
         <div class="crawl_queue-container">
@@ -27,7 +30,18 @@
                         <p class="highlight-title-text">crawler</p>
                     </div>
                 </header>
-                <form action="{{ url_for('add_to_crawler')}}" method="post">
+                <div class="index-selection-container">
+                    <button class="open-modal-btn" onclick="openModal()">Choose Index</button>
+                    <div id="index-name">
+                        <p style="color: #0056b3">Index:</p>
+                        {% if index_name %}
+                        <p id="index-value">"{{ index_name }}"</p>
+                        {% else %}
+                        <p id="index-value">"Default"</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <form action="{{ url_for('add_to_crawler')}}" method="post" onsubmit="return validateCrawlQueue()">
                     <div class="search-bar">
                         <input
                             class="bar-input"
@@ -65,5 +79,20 @@
                 </div>
             </div>
         </footer>
+        <div id="indexModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <form id="indexForm">
+                    <h2>Choose Index</h2>
+                    <select name="index" id="indexSelect">
+                        {% for index_name in available_indecies %}
+                        <option value="{{ index_name }}">{{ index_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <br /><br />
+                    <input type="button" value="Set Index" onclick="setIndex()" />
+                </form>
+            </div>
+        </div>
     </body>
 </html>

@@ -79,7 +79,8 @@ footer {
 }
 
 .highlight-main-text{
-    font-size: 2em;
+    font-size: 1.7em;
+    font-weight: bold;
     color: #333;
     margin-bottom: 20px;
     text-align: center;
@@ -435,6 +436,13 @@ header a {
     background-color: #0056b3;
 }
 
+/* Flex container */
+.index-selection-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
 
 button.open-modal-btn {
     padding: 8px 15px;
@@ -451,13 +459,6 @@ button.open-modal-btn {
 
 button.open-modal-btn:hover {
     background-color: #0056b3;
-}
-
-/* Flex container */
-.index-selection-container {
-    display: flex;
-    align-items: center;
-    gap: 15px;
 }
 
 /* Styling for the index name display */
